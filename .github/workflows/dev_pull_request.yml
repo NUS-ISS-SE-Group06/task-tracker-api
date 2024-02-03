@@ -10,7 +10,6 @@ on:
 jobs:
   test_build:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Source Codes
       uses: actions/checkout@v3
@@ -22,5 +21,20 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B clean package
+
+  unit_test:
+    needs: test_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Codes
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+      - name: Run Test with Maven
+        run: mvn -B test
       
         
