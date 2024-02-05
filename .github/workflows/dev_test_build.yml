@@ -57,7 +57,7 @@ jobs:
         run: mvn -B test
       - name: List Contents of target Directory
         run: ls -R target
-  sonar:
+  code_scan:
     needs: unit_test
     runs-on: ubuntu-latest
     steps:
