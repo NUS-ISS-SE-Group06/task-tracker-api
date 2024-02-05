@@ -12,8 +12,7 @@ on:
       - dev_pull_request
     types:
       - completed
-    branches:
-      - main
+
 jobs:
   create_prd_package:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
