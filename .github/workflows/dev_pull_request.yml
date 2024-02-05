@@ -120,7 +120,8 @@ jobs:
           overwrite: true
           if-no-files-found: error
       - name: Publish to GitHub Packages
-        run: mvn deploy
+        run: |
+          cp cp target/*.jar $GITHUB_WORKSPACE
         
 
     
