@@ -94,6 +94,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       STAGING_DIR: staging
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
@@ -118,14 +119,8 @@ jobs:
           path: ${{ env.STAGING_DIR }}
           overwrite: true
           if-no-files-found: error
-      - name: Display Artifact URL
-        run: echo "Artifact URL =  ${{ needs.create_uat_package.outputs.artifact-url }}"
-
-      # - name: Publish to GitHub Packages
-      #   run: mvn deploy
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: Publish to GitHub Packages
+        run: mvn deploy
         
 
     
