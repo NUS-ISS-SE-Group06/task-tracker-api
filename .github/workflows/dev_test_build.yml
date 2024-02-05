@@ -1,10 +1,11 @@
 name: dev_test_build
 on:
- push:
-    branches:
-      - dev
-    paths:
-      - src/** 
+  #push:
+  workflow_dispatch:
+    #branches:
+    #  - dev
+    #paths:
+    #  - src/** 
 
 jobs:
   test_build:
