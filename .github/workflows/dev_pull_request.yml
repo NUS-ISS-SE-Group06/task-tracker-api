@@ -89,32 +89,36 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-
-  # create_uat_package:
-  #   needs: sonar
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     set: staging_dir
-  #   steps:
-  #     - name: Checkout Source Codes
-  #       uses: actions/checkout@v3
-
-  #     - name: List Contents of target Directory
-  #       run: ls -R target
-
-  #     - name: Create Staging Directory
-  #       run: |
-  #         mkdir staging
-  #         cp target/*.jar staging
-  #     - name: Set Staging Directory Output
-  #       id: set-output
-  #       run: echo "::set-output name=staging_dir::staging"
-
-  #     - name: Upload Staging Artifact
-  #       uses: actions/upload-artifact@v2
-  #       with:
-  #         name: staging
-  #         path: staging
+  create_uat_package:
+    needs: sonar
+    runs-on: ubuntu-latest
+    outputs:
+      set: staging_dir
+    steps:
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
+      - name: Cache Maven Packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2
+            target
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2  
+      - name: List Contents of target Directory
+        run: ls -R target
+      - name: Create Staging Directory
+        run: |
+          mkdir staging
+          cp target/*.jar staging
+      - name: Set Staging Directory Output
+        id: set-output
+        run: echo "::set-output name=staging_dir::staging"
+      - name: Upload Staging Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: staging
+          path: staging
         
 
     
