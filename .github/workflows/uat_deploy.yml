@@ -4,7 +4,7 @@ name: uat_deploy
 on:
   #workflow_dispatch:
 
-  #This workflow is automatically triggered upon the successful completion of the development build
+  #This workflow is automatically triggered upon the successful completion of the development build after pull request approved.
   workflow_run:
     workflows: 
       - dev_pull_request
