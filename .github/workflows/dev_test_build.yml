@@ -1,11 +1,11 @@
 name: dev_test_build
 on:
-  #push:
-  workflow_dispatch:
-    #branches:
-    #  - dev
-    #paths:
-    #  - src/** 
+  #workflow_dispatch:
+  push:
+    branches:
+      - dev
+    paths:
+      - src/** 
 
 jobs:
   test_build:
@@ -53,7 +53,7 @@ jobs:
         run: mvn -B test
   
   sonar:
-    needs: test_build
+    needs: unit_test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Codes
