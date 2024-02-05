@@ -63,6 +63,12 @@ jobs:
     steps:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: maven
       - name: Cache Maven Packages
         uses: actions/cache@v4
         with:
