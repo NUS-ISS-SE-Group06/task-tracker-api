@@ -36,8 +36,8 @@ jobs:
     needs: dev_build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v4
+      # - name: Checkout Source Codes
+      #   uses: actions/checkout@v4
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -61,6 +61,16 @@ jobs:
   #   needs: unit_test
   #   runs-on: ubuntu-latest
   #   steps:
+  #     - name: Checkout Source Codes
+  #       uses: actions/checkout@v4
+  #     - name: Cache Maven Packages
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: |
+  #           ~/.m2
+  #           target
+  #         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+  #         restore-keys: ${{ runner.os }}-m2  
   #     - name: Cache SonarCloud Packages
   #       uses: actions/cache@v4
   #       with:
