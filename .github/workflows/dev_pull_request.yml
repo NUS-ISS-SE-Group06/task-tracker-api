@@ -32,26 +32,28 @@ jobs:
           restore-keys: ${{ runner.os }}-m2  
       - name: Build with Maven
         run: mvn -B clean package
-  # unit_test:
-  #   needs: dev_build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Set up JDK
-  #       uses: actions/setup-java@v4
-  #       with:
-  #         distribution: 'temurin'
-  #         java-version: '21'
-  #         cache: maven
-  #     - name: Cache Maven Packages
-  #       uses: actions/cache@v4
-  #       with:
-  #         path: |
-  #           ~/.m2
-  #           target
-  #         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-  #         restore-keys: ${{ runner.os }}-m2  
-  #     - name: Run Test with Maven
-  #       run: mvn -B test
+  unit_test:
+    needs: dev_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Contents of target Directory
+        run: ls -R target
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: maven
+      - name: Cache Maven Packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2
+            target
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2  
+      - name: Run Test with Maven
+        run: mvn -B test
   
   # sonar:
   #   needs: unit_test
