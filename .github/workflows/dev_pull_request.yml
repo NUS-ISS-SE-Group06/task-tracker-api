@@ -52,11 +52,10 @@ jobs:
             target
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2  
-      - name: List Contents of target Directory
-        run: ls -R target
       - name: Run Test with Maven
         run: mvn -B test
-  
+      - name: List Contents of target Directory
+        run: ls -R target
   sonar:
     needs: unit_test
     runs-on: ubuntu-latest
