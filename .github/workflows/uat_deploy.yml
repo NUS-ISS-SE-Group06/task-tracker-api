@@ -12,6 +12,8 @@ on:
       - dev_test_build
     types:
       - completed
+    branches:
+      - dev
 jobs:
   create_uat_package:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
