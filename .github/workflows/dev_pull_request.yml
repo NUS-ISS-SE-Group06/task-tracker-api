@@ -127,7 +127,7 @@ jobs:
           if-no-files-found: error
       - name: Publish to GitHub Packages
         run: |
-          cp cp target/*.jar $GITHUB_WORKSPACE
+          cp target/*.jar $GITHUB_WORKSPACE
         
 
     
