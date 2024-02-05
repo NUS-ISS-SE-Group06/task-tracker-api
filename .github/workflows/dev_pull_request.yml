@@ -36,8 +36,8 @@ jobs:
     needs: dev_build
     runs-on: ubuntu-latest
     steps:
-      - name: List Contents of target Directory
-        run: ls -R target
+      - name: Checkout Source Codes
+        uses: actions/checkout@v4
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -52,6 +52,8 @@ jobs:
             target
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2  
+      - name: List Contents of target Directory
+        run: ls -R target
       - name: Run Test with Maven
         run: mvn -B test
   
