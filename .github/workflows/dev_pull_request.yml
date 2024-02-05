@@ -92,8 +92,6 @@ jobs:
   create_uat_package:
     needs: sonar
     runs-on: ubuntu-latest
-    outputs:
-      set: staging_dir
     steps:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
@@ -112,13 +110,17 @@ jobs:
           mkdir staging
           cp target/*.jar staging
       - name: Set Staging Directory Output
-        id: set-output
-        run: echo "::set-output name=staging_dir::staging"
+        run: echo "staging" >> $GITHUB_ENV
       - name: Upload Staging Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: staging
+          name: uat_package
           path: staging
+          overwrite: true
+          if-no-files-found: error
+      - name: Display Artifact URL
+        run: echo "Artifact URL =  ${{ needs.create_uat_package.outputs.artifact-url }}"
+
         
 
     
