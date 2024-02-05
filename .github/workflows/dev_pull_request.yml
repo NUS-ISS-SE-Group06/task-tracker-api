@@ -36,22 +36,6 @@ jobs:
     needs: dev_build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: maven
-      - name: Cache Maven Packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.m2
-            target
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2  
       - name: Run Test with Maven
         run: mvn -B test
   
@@ -59,22 +43,6 @@ jobs:
     needs: unit_test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v3
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: maven
-      - name: Cache Maven Packages
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.m2
-            target
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
       - name: Cache SonarCloud Packages
         uses: actions/cache@v3
         with:
@@ -87,27 +55,31 @@ jobs:
           SONAR_TOKEN: ${{secrets.SONAR_TOKEN}}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 
-  create_package:
-    needs: sonar
-    runs-on: ubuntu-latest
-    outputs:
-      set: staging_dir
-    steps:
-      - name: Checkout Source Codes
-        uses: actions/checkout@v3
-      - name: Create Staging Directory
-        run: |
-          mkdir staging
-          cp target/*.jar staging
-      - name: Set Staging Directory Output
-        id: set-output
-        run: echo "::set-output name=staging_dir::staging"
+  # create_uat_package:
+  #   needs: sonar
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     set: staging_dir
+  #   steps:
+  #     - name: Checkout Source Codes
+  #       uses: actions/checkout@v3
 
-      - name: Upload Staging Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: staging
-          path: staging
+  #     - name: List Contents of target Directory
+  #       run: ls -R target
+
+  #     - name: Create Staging Directory
+  #       run: |
+  #         mkdir staging
+  #         cp target/*.jar staging
+  #     - name: Set Staging Directory Output
+  #       id: set-output
+  #       run: echo "::set-output name=staging_dir::staging"
+
+  #     - name: Upload Staging Artifact
+  #       uses: actions/upload-artifact@v2
+  #       with:
+  #         name: staging
+  #         path: staging
         
 
     
