@@ -50,6 +50,9 @@ jobs:
           overwrite: true
           if-no-files-found: error
         
+      - name: Set Exit Code to 0
+        run: exit 0
+
   #uat_deploy:
 
   # runs-on: ubuntu-latest
