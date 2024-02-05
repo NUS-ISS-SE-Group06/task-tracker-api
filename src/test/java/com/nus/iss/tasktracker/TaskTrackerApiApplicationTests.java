@@ -11,7 +11,7 @@ class TaskTrackerApiApplicationTests {
 
 	@Test
 	void contextLoads(ApplicationContext context) {
-		assertThat(context).isNotNull123;
+		assertThat(context).isNotNull();
 		//Test update
 		//Test update2123
 		
