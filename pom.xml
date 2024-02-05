@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.nus.iss</groupId>
 	<artifactId>task-tracker-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>task-tracker-api</name>
 	<description>Task Tracker project helps users to assign &amp; complete tasks. With this project users can easily track the task progress let it be personal or professional work.</description>
 	<properties>
