@@ -36,6 +36,12 @@ jobs:
     needs: dev_build
     runs-on: ubuntu-latest
     steps:
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
       - name: Cache Maven Packages
         uses: actions/cache@v2
         with:
