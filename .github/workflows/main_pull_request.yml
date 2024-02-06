@@ -9,13 +9,14 @@ on:
       - closed
 
 jobs:
-  if_merged:
+  code_merge:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - run: |
           echo The PR was merged
   dev_build:
+    needs: code_merge
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Codes
