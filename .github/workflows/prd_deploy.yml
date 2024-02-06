@@ -10,10 +10,11 @@ on:
     workflows: 
       - main_pull_request
     types:
-      - completed
+      - closed
 
 jobs:
   create_prd_package:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     env:
       STAGING_DIR: prds_staging
