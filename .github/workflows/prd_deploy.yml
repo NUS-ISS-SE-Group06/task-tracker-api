@@ -10,7 +10,7 @@ on:
     workflows: 
       - main_pull_request
     types:
-      - closed
+      - completed
 
 jobs:
   create_prd_package:
