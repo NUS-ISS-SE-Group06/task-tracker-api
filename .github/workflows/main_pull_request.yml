@@ -15,7 +15,7 @@ jobs:
     steps:
       - run: |
           echo The PR was merged
-  dev_build:
+  main_build:
     needs: code_merge
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +40,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean package
   unit_test:
-    needs: dev_build
+    needs: main_build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Codes
