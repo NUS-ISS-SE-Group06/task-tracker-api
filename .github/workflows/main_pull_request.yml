@@ -1,5 +1,5 @@
 
-name: dev_pull_request
+name: main_pull_request
 
 on:
   # This workflow is automatically triggered upon the approval of a pull request,

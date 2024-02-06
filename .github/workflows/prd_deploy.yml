@@ -8,7 +8,7 @@ on:
 
   workflow_run:
     workflows: 
-      - dev_pull_request
+      - main_pull_request
     types:
       - completed
 
