@@ -15,14 +15,16 @@ on:
 
 jobs:
   create_prd_package:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     env:
-      STAGING_DIR: staging
+      STAGING_DIR: prds_staging
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     steps:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -46,7 +48,7 @@ jobs:
       - name: Upload Staging Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: uat_package
+          name: prd_package
           path: ${{ env.STAGING_DIR }}
           overwrite: true
           if-no-files-found: error
