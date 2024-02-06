@@ -5,18 +5,23 @@ on:
   # This workflow is automatically triggered upon the approval of a pull request,
   # with a condition checking for changes in the source files or the pom.xml file in the development branch.
   pull_request:
-    branches:
-      - main
-    paths:
-      - 'src/**' 
-      - 'pom.xml' 
+    types:
+      - closed
 
 jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo The PR was merged
   dev_build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source Codes
         uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
