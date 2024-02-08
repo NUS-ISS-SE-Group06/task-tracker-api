@@ -23,7 +23,7 @@ jobs:
       - run: |
           echo The PR was branch synchronization code merged from main -> dev. No further step.
   main_build:
-    if: github.ref != 'refs/heads/dev'  # Skip execution if the branch is main
+    if: github.ref == 'refs/heads/main'  # execution when code merge: dev -> main
     needs: code_merge
     runs-on: ubuntu-latest
     steps:
@@ -48,7 +48,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean package
   unit_test:
-    if: github.ref != 'refs/heads/dev'  # Skip execution if the branch is main
+    if: github.ref == 'refs/heads/main'  # execution when code merge: dev -> main
     needs: main_build
     runs-on: ubuntu-latest
     steps:
@@ -73,7 +73,7 @@ jobs:
       - name: List Contents of target Directory
         run: ls -R target
   code_scan:
-    if: github.ref != 'refs/heads/dev'  # Skip execution if the branch is main
+    if: github.ref == 'refs/heads/main'  # execution when code merge: dev -> main
     needs: unit_test
     runs-on: ubuntu-latest
     steps:
