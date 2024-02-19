@@ -16,7 +16,7 @@ public class GroupInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
-    private int groupId;
+    private Integer groupId;
     @Column(name = "group_name")
     private String groupName;
     @Column(name = "group_description")
@@ -66,66 +66,6 @@ CREATE TABLE group_info(
    PRIMARY KEY (group_id)
 
 );
-
-
-
-
-
-CREATE TABLE group_info(
-   group_id INTEGER NOT NULL,
-   group_name TEXT,
-   group_description TEXT,
-   created_by TEXT NOT NULL,
-   created_date datetime default current_timestamp NOT NULL,
-   modified_by TEXT,
-   modified_date datetime default current_timestamp,
-   "delete_flag" TEXT NOT NULL
-        CHECK( typeof("boolean") = "text" AND
-               "boolean" IN ("TRUE","FALSE")
-   ),
-   PRIMARY KEY (group_id)
-
-);
-
-
-CREATE TABLE task_info(
-   task_id INTEGER NOT NULL,
-   task_name INTEGER,
-   task_description TEXT,
-   task_priority TEXT NOT NULL,
-   task_cateogry_id INTEGER NOT NULL,
-   task_due_date datetime default current_timestamp NOT NULL,
-   task_assignee INTEGER,
-   task_reward_pints INTEGER,
-   task_status TEXT NOT NULL,
-   created_by TEXT NOT NULL,
-   created_date datetime default current_timestamp NOT NULL,
-   modified_by TEXT,
-   modifed_date datetime default current_timestamp NOT NULL,
-    "delete_flag" TEXT NOT NULL
-        CHECK( typeof("boolean") = "text" AND
-               "boolean" IN ("TRUE","FALSE")
-   ),
-   PRIMARY KEY (task_id)
-
-);
-
-
-
-
-CREATE TABLE task_comments(
-   task_comment_id INTEGER NOT NULL,
-   task_id INTEGER NOT NULL,
-   task_comment TEXT,
-   created_by TEXT NOT NULL,
-   created_date datetime default current_timestamp NOT NULL,
-   PRIMARY KEY (task_comment_id,task_id),
-   FOREIGN KEY (task_id)
-      REFERENCES task_info (task_id)
-         ON DELETE CASCADE
-         ON UPDATE NO ACTION
-);
-
 
 
 CREATE TABLE task_audit(

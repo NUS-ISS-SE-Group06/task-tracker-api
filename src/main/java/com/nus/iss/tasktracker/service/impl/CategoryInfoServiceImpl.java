@@ -29,8 +29,10 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
             if(!categoryInfoRepository.existsByCategoryName(categoryInfo.getCategoryName())){
                 categoryInfo.setCategoryId(categoryInfoRepository.findMaxId()+1);
                 categoryInfo.setCreatedDate(LocalDateTime.now());
-                categoryInfoRepository.save(categoryInfo);
-                return CrudStatus.RECORD_CREATED;
+                CategoryInfo output=categoryInfoRepository.save(categoryInfo);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_CREATED;
             }
         }catch(Exception e){
             log.debug(e.getMessage());
@@ -60,8 +62,10 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
             if(!record.isDeletedFlag()) {
                 record.setCategoryName(categoryInfo.getCategoryName());
                 record.setModifiedDate(LocalDateTime.now());
-                categoryInfoRepository.save(record);
-                return CrudStatus.RECORD_AFFECTED;
+                CategoryInfo output=categoryInfoRepository.save(record);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_AFFECTED;
             }
         }
         return CrudStatus.NO_RECORD_AFFECTED;
@@ -76,8 +80,10 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
             if(!record.isDeletedFlag()) {
                 record.setDeletedFlag(true);
                 record.setModifiedDate(LocalDateTime.now());
-                categoryInfoRepository.save(record);
-                return CrudStatus.RECORD_DELETED;
+                CategoryInfo output=categoryInfoRepository.save(record);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_DELETED;
             }
         }
         return CrudStatus.NO_RECORD_DELETED;
@@ -89,7 +95,10 @@ public class CategoryInfoServiceImpl implements CategoryInfoService {
         Optional<CategoryInfo> opt =categoryInfoRepository.findById(id);
         if (opt.isPresent()){
             categoryInfoRepository.deleteById(id);
-            return CrudStatus.RECORD_DELETED;
+
+            boolean output =categoryInfoRepository.existsById(id);
+            if (!output )
+                return CrudStatus.RECORD_DELETED;
         }
         return CrudStatus.NO_RECORD_DELETED;
     }

@@ -1,6 +1,7 @@
 package com.nus.iss.tasktracker.repository;
 
 import com.nus.iss.tasktracker.model.CategoryInfo;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -11,11 +12,12 @@ import java.util.Optional;
 @Repository
 public interface CategoryInfoRepository extends JpaRepository<CategoryInfo, Integer> {
 
-    public boolean existsByCategoryName(String name);
+    boolean existsByCategoryName(String name);
 
-    public Optional<CategoryInfo> findByCategoryIdAndDeletedFlag(Integer id, boolean isDeletedFlag);
-    public List<CategoryInfo> findByDeletedFlagFalse();
+    Optional<CategoryInfo> findByCategoryIdAndDeletedFlag(Integer id, boolean isDeletedFlag);
+    List<CategoryInfo> findByDeletedFlagFalse();
     @Query("SELECT COALESCE(max(a.categoryId),0) from CategoryInfo a")
-    public Integer findMaxId();
+    @Transactional
+    Integer findMaxId();
 
 }

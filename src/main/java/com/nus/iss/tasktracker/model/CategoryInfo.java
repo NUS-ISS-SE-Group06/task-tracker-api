@@ -16,10 +16,9 @@ public class CategoryInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private int categoryId;
+    private Integer categoryId;
     @Column(name = "category_name")
     private String categoryName;
-
     @Column(name = "created_by")
     private String createdBy;
     @Temporal(TemporalType.TIMESTAMP)
@@ -56,7 +55,6 @@ CREATE TABLE task_category(
    PRIMARY KEY (task_category_id)
 
 );
-
 
 
  */

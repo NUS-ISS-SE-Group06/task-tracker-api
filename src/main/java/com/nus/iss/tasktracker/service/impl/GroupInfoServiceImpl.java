@@ -29,8 +29,10 @@ public class GroupInfoServiceImpl implements GroupInfoService {
             if(!groupInfoRepository.existsByGroupName(groupInfo.getGroupName())){
                 groupInfo.setGroupId(groupInfoRepository.findMaxId()+1);
                 groupInfo.setCreatedDate(LocalDateTime.now());
-                groupInfoRepository.save(groupInfo);
-                return CrudStatus.RECORD_CREATED;
+                GroupInfo output= groupInfoRepository.save(groupInfo);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_CREATED;
             }
         }catch(Exception e){
             log.debug(e.getMessage());
@@ -60,8 +62,10 @@ public class GroupInfoServiceImpl implements GroupInfoService {
             if(!record.isDeletedFlag()) {
                 record.setGroupName(groupInfo.getGroupName());
                 record.setModifiedDate(LocalDateTime.now());
-                groupInfoRepository.save(record);
-                return CrudStatus.RECORD_AFFECTED;
+                GroupInfo output= groupInfoRepository.save(record);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_AFFECTED;
             }
         }
         return CrudStatus.NO_RECORD_AFFECTED;
@@ -76,8 +80,10 @@ public class GroupInfoServiceImpl implements GroupInfoService {
             if(!record.isDeletedFlag()) {
                 record.setDeletedFlag(true);
                 record.setModifiedDate(LocalDateTime.now());
-                groupInfoRepository.save(record);
-                return CrudStatus.RECORD_DELETED;
+                GroupInfo output= groupInfoRepository.save(record);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_DELETED;
             }
         }
         return CrudStatus.NO_RECORD_DELETED;
@@ -89,7 +95,10 @@ public class GroupInfoServiceImpl implements GroupInfoService {
         Optional<GroupInfo> opt =groupInfoRepository.findById(id);
         if (opt.isPresent()){
             groupInfoRepository.deleteById(id);
-            return CrudStatus.RECORD_DELETED;
+
+            boolean output =groupInfoRepository.existsById(id);
+            if (!output )
+                return CrudStatus.RECORD_DELETED;
         }
         return CrudStatus.NO_RECORD_DELETED;
     }

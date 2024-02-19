@@ -16,9 +16,9 @@ public class CommentInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private int commentId;
+    private Integer commentId;
     @Column(name = "task_id")
-    private int taskId;
+    private Integer taskId;
     @Column(name = "task_comment")
     private String taskComment;
     @Column(name = "created_by")
@@ -43,9 +43,6 @@ public class CommentInfo {
 }
 
 /*
-
-
-
 
 CREATE TABLE task_comments(
    task_comment_id INTEGER NOT NULL,

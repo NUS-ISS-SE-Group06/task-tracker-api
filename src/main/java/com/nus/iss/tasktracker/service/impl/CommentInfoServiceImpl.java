@@ -29,8 +29,11 @@ public class CommentInfoServiceImpl implements CommentInfoService {
             //if( !taskInfoRepository.existByTaskId(commentInfo.getTaskId)
                 commentInfo.setCommentId(commentInfoRepository.findMaxId()+1);
                 commentInfo.setCreatedDate(LocalDateTime.now());
-                commentInfoRepository.save(commentInfo);
-                return CrudStatus.RECORD_CREATED;
+                CommentInfo output= commentInfoRepository.save(commentInfo);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_CREATED;
+
             //}
         }catch(Exception e){
             log.debug(e.getMessage());
@@ -60,8 +63,10 @@ public class CommentInfoServiceImpl implements CommentInfoService {
             CommentInfo record = opt.get();
             if(!record.isDeletedFlag()) {
                 record.setDeletedFlag(true);
-                commentInfoRepository.save(record);
-                return CrudStatus.RECORD_DELETED;
+                CommentInfo output= commentInfoRepository.save(record);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_DELETED;
             }
         }
         return CrudStatus.NO_RECORD_DELETED;
@@ -73,7 +78,11 @@ public class CommentInfoServiceImpl implements CommentInfoService {
         Optional<CommentInfo> opt =commentInfoRepository.findById(id);
         if (opt.isPresent()){
             commentInfoRepository.deleteById(id);
-            return CrudStatus.RECORD_DELETED;
+
+            boolean output =commentInfoRepository.existsById(id);
+            if (!output )
+                return CrudStatus.RECORD_DELETED;
+
         }
         return CrudStatus.NO_RECORD_DELETED;
     }

@@ -29,8 +29,10 @@ public class UserInfoServiceImpl implements UserInfoService {
             if(!userInfoRepository.existsByUserName(userInfo.getUserName())){
                 userInfo.setUserId(userInfoRepository.findMaxId()+1);
                 userInfo.setCreatedDate(LocalDateTime.now());
-                userInfoRepository.save(userInfo);
-                return CrudStatus.RECORD_CREATED;
+                UserInfo output= userInfoRepository.save(userInfo);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_CREATED;
             }
         }catch(Exception e){
             log.debug(e.getMessage());
@@ -60,8 +62,10 @@ public class UserInfoServiceImpl implements UserInfoService {
                 record.setEmail(userInfo.getEmail());
                 record.setRole(userInfo.getRole());
                 record.setModifiedDate(LocalDateTime.now());
-                userInfoRepository.save(record);
-                return CrudStatus.RECORD_AFFECTED;
+                UserInfo output= userInfoRepository.save(record);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_AFFECTED;
             }
         }
         return CrudStatus.NO_RECORD_AFFECTED;
@@ -75,8 +79,10 @@ public class UserInfoServiceImpl implements UserInfoService {
             if(!record.isDeletedFlag()) {
                 record.setPassword(password);
                 record.setModifiedDate(LocalDateTime.now());
-                userInfoRepository.save(record);
-                return CrudStatus.RECORD_AFFECTED;
+                UserInfo output= userInfoRepository.save(record);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_AFFECTED;
             }
         }
         return CrudStatus.NO_RECORD_AFFECTED;
@@ -90,8 +96,10 @@ public class UserInfoServiceImpl implements UserInfoService {
             if(!record.isDeletedFlag()) {
                 record.setDeletedFlag(true);
                 record.setModifiedDate(LocalDateTime.now());
-                userInfoRepository.save(record);
-                return CrudStatus.RECORD_DELETED;
+                UserInfo output= userInfoRepository.save(record);
+
+                if ( output != null )
+                    return CrudStatus.RECORD_DELETED;
             }
         }
         return CrudStatus.NO_RECORD_DELETED;
@@ -102,7 +110,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         Optional<UserInfo> opt =userInfoRepository.findById(id);
         if (opt.isPresent()){
             userInfoRepository.deleteById(id);
-            return CrudStatus.RECORD_DELETED;
+
+            boolean output =userInfoRepository.existsById(id);
+            if (!output )
+                return CrudStatus.RECORD_DELETED;
         }
         return CrudStatus.NO_RECORD_DELETED;
     }
