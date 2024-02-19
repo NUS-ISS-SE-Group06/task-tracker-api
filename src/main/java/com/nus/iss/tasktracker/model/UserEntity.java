@@ -13,4 +13,6 @@ public class UserEntity {
 
     private String userRole;
 
+    private String Test;
+
 }

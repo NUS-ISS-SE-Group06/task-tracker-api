@@ -24,4 +24,7 @@ public class UserRegistrationController {
         log.info("user endpoint called with id {}", id);
         return userRegistrationService.getUserById(id);
     }
+
+
+
 }
