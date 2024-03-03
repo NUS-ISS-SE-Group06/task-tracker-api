@@ -15,4 +15,6 @@ public class UserEntity {
 
     private String Test;
 
+    private  String password;
+
 }

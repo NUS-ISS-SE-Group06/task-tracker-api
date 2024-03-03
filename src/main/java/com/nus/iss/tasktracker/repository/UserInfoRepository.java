@@ -1,6 +1,7 @@
 package com.nus.iss.tasktracker.repository;
 
 //import com.nus.iss.tasktracker.model.UserInfo;
+import com.nus.iss.tasktracker.model.UserEntity;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public interface UserInfoRepository
 //        extends JpaRepository<UserInfo, Integer>
         {
+            // Implement findByUsername method to interact with the database or any data store
+            UserEntity findByUsername(String username);
 //
 //    boolean existsByUserName(String name);
 //

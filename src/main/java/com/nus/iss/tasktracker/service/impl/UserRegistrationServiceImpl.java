@@ -49,4 +49,11 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         log.debug("User DTO {}",userDTO.toString());
         return userDTO;
     }
+    @Override
+    public UserDTO savePassword(int userId, String password){
+
+        UserEntity userEntity = new UserEntity();
+
+
+    }
 }
