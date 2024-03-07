@@ -6,13 +6,14 @@ import lombok.Data;
 @Data
 public class UserDTO {
 
-    private int id;
+    private int userId;
 
-    private String userName;
+    private String username;
 
     private String userRole;
 
-    private  String password;
+    private String oldPassword;
+    private String newPassword;
 
 
 }
