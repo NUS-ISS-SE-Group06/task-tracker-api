@@ -33,7 +33,7 @@ public class CustomResponseHandler {
         Response successResponse = new Response(
                 LocalDateTime.now(),
                 status.value(),
-                "Success",
+                "",
                 message,
                 body
         );
