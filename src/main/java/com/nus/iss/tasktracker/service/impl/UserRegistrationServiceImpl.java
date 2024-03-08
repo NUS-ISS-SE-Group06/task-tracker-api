@@ -52,7 +52,10 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     public void changePassword(UserDTO requestDTO){
 
         UserInfo userEntity = userInfoRepository.findByUsername(requestDTO.getUsername());
-
+        System.out.println(requestDTO.getUsername());
+        if(userEntity == null){
+            throw new RuntimeException("Make sure the username is correct!");
+        }
         if (!userEntity.getPassword().equals(requestDTO.getOldPassword())) {
             throw new RuntimeException("Old password does not match!");
         }
