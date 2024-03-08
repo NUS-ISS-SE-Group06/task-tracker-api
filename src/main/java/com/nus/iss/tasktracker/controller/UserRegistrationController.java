@@ -6,6 +6,7 @@ import com.nus.iss.tasktracker.service.UserRegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.nus.iss.tasktracker.util.CustomResponseHandler;
@@ -26,10 +27,10 @@ public class UserRegistrationController {
         return userRegistrationService.getUserById(id);
     }
 
-    @PostMapping("/{username}/change-password")
-    public ResponseEntity<Response> changePassword(@PathVariable String username, @RequestBody UserDTO requestDTO) throws RuntimeException {
-        log.info("Inside changePassword. Username: {}", username);
-        userRegistrationService.changePassword(username, requestDTO);
+    @PostMapping(value = "/change-password")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<Response> changePassword(@RequestBody UserDTO requestDTO) throws RuntimeException {
+        userRegistrationService.changePassword(requestDTO);
         Object responseBody = null;// Your success response body
         HttpStatus status = HttpStatus.OK;
         String successMessage = "Password updated successfully.";

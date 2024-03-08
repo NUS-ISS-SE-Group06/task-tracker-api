@@ -49,9 +49,9 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         return userDTO;
     }
     @Override
-    public void changePassword(String username, UserDTO requestDTO){
+    public void changePassword(UserDTO requestDTO){
 
-        UserInfo userEntity = userInfoRepository.findByUsername(username);
+        UserInfo userEntity = userInfoRepository.findByUsername(requestDTO.getUsername());
 
         if (!userEntity.getPassword().equals(requestDTO.getOldPassword())) {
             throw new RuntimeException("Old password does not match!");
