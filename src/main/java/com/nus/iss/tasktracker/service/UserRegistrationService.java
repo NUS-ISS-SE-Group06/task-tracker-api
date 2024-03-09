@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 
 public interface UserRegistrationService {
     public UserDTO getUserById(int id);
+    public void changePassword(UserDTO requestDTO);
 }
