@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "5d5fa039-aded-4372-bdc8-3e26af20a5a9",
+		"name": "NUS_TaskTracker_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2751782"
+	},
+	"item": [
+		{
+			"name": "ChangePassword",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"britta\",\n    \"oldPassword\": \"admin12345\",\n    \"newPassword\": \"admin123456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8688/api/change-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8688",
+					"path": [
+						"api",
+						"change-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "william",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "william",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8688/api/userinfo/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8688",
+					"path": [
+						"api",
+						"userinfo",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
