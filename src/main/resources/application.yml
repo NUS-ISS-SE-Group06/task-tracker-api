@@ -18,4 +18,9 @@ spring:
     restart:
       enabled: true
 
+task-tracker:
+  jwt:
+    secret: NUS-ISS
+    expirationTimeInMins: 10
+
 

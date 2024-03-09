@@ -33,6 +33,7 @@
 		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
 		<springfox.version>3.0.0</springfox.version>
 		<jakarta.servlet.version>4.0.4</jakarta.servlet.version>
+		<io.jsonwebtoken.version>0.12.5</io.jsonwebtoken.version>
 	</properties>
 
 	<dependencies>
@@ -195,6 +196,23 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${io.jsonwebtoken.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${io.jsonwebtoken.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${io.jsonwebtoken.version}</version>
+			<scope>runtime</scope>
+		</dependency>
 
 
 	</dependencies>
