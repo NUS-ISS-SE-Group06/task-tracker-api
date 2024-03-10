@@ -11,6 +11,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Integer>
         {
             // Implement findByUsername method to interact with the database or any data store
             UserInfo findByUsername(String username);
+            UserInfo findByUsernameAndPasswordAndDeleteFlag (String username,String password,String delete_flag);
 
 
 //
