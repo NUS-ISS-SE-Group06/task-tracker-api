@@ -26,7 +26,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserDTO UserLogin(UserDTO requestDTO){
         UserInfo userEntity = userInfoRepository.findByUsernameAndPasswordAndDeleteFlag (requestDTO.getUsername(),requestDTO.getPassword(),"FALSE");
-        userEntity.setPassword("");
+
+        if (userEntity != null) {
+            userEntity.setPassword("");
+        }
         return userMapper.userEntityToUserDTO(userEntity);
     }
 

@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("/userinfo")
+@Slf4j
 public class UserInfoController {
 
     private final UserInfoService userInfoService;
@@ -24,16 +26,19 @@ public class UserInfoController {
     @PostMapping("/login")
     public ResponseEntity<Response> login(@RequestBody UserDTO requestDTO) throws RuntimeException {
         UserDTO userDTO= userInfoService.UserLogin(requestDTO);
-        Object responseBody = null;
+        log.info("userDTO : {}", userDTO);
+        Object responseBody=null;
         HttpStatus status = HttpStatus.OK;
-        String successMessage = "";
+        String successOrFailMessage="";
 
         if (userDTO !=  null){
             responseBody = userDTO;
-            successMessage = "Logon successfully.";
+            successOrFailMessage = "Logon successfully.";
+        } else {
+            successOrFailMessage ="Invalid Credential.";
         }
 
-        return CustomResponseHandler.handleSuccessResponse(responseBody, status, successMessage);
+        return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
 
     }
 

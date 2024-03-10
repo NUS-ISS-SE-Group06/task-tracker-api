@@ -40,4 +40,15 @@ public class CustomResponseHandler {
 
         return new ResponseEntity<>(successResponse, status);
     }
+
+    public static ResponseEntity<Response> handleFailResponse(Object body, HttpStatus status, String message) {
+        Response successResponse = new Response(
+                LocalDateTime.now(),
+                status.value(),message,
+                "",
+                body
+        );
+
+        return new ResponseEntity<>(successResponse, status);
+    }
 }
