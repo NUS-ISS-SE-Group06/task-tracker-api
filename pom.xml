@@ -33,6 +33,7 @@
 		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
 		<springfox.version>3.0.0</springfox.version>
 		<jakarta.servlet.version>4.0.4</jakarta.servlet.version>
+		<junit-jupiter.version>5.10.2</junit-jupiter.version>
 	</properties>
 
 	<dependencies>
@@ -193,6 +194,14 @@
 			<version>${mapstruct.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit-jupiter.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 
 
 
