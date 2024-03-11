@@ -11,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,6 +63,32 @@ class UserInfoServiceImplTest {
         assertEquals("",returnDTO.getPassword());
         assertEquals("ROLE_USER", returnDTO.getUserRole());
 
+    }
+
+
+
+    @Test
+    void testUserLogin_InValidUser(){
+
+        UserInfo userEntity=null;
+
+        UserDTO returnDTO=null;
+
+        when(userInfoRepository.findByUsernameAndPasswordAndDeleteFlag("User1","password1","FALSE")).thenReturn(userEntity);
+        when(userMapper.userEntityToUserDTO(userEntity)).thenReturn(returnDTO);
+
+        UserDTO requestDTO=new UserDTO();
+        requestDTO.setUsername("User1");
+        requestDTO.setPassword("password1");
+
+
+        UserDTO resultDTO=userInfoService.UserLogin(requestDTO);
+
+
+        verify(userInfoRepository).findByUsernameAndPasswordAndDeleteFlag("User1","password1","FALSE");
+        verify(userMapper).userEntityToUserDTO(userEntity);
+
+        assertNull(returnDTO);
     }
 
 
