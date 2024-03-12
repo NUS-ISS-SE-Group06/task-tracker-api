@@ -1,44 +1,44 @@
 package com.nus.iss.tasktracker.controller;
 
 
-import com.nus.iss.tasktracker.service.UserRegistrationService;
-import com.nus.iss.tasktracker.util.JWTUtil;
-import io.swagger.annotations.ApiOperation;
+import com.nus.iss.tasktracker.dto.Response;
+import com.nus.iss.tasktracker.dto.UserDTO;
+import com.nus.iss.tasktracker.service.UserInfoService;
+import com.nus.iss.tasktracker.util.CustomResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.util.MultiValueMap;
-
+import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("/userinfo")
+@Slf4j
 public class UserInfoController {
 
-    private final JWTUtil jwtUtil;
-
+    private final UserInfoService userInfoService;
     @Autowired
-    public UserInfoController(JWTUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
+    public UserInfoController(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MultiValueMap<String, String> formData) {
-        String username = formData.getFirst("username");
-        String password = formData.getFirst("password");
+    public ResponseEntity<Response> login(@RequestBody UserDTO requestDTO) throws RuntimeException {
+        UserDTO userDTO= userInfoService.UserLogin(requestDTO);
+        log.info("userDTO : {}", userDTO);
+        Object responseBody=null;
+        HttpStatus status = HttpStatus.OK;
+        String successOrFailMessage="";
 
-        String response="{ \"login\":\"success\", \"role\":\"admin\"}";
-
-        jwtUtil.createJWT(username, "ADMIN");
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
+        if (userDTO !=  null){
+            responseBody = userDTO;
+            successOrFailMessage = "Logon successfully.";
+            return CustomResponseHandler.handleSuccessResponse(responseBody, status, successOrFailMessage);
+        } else {
+            successOrFailMessage ="Invalid Credential.";
+            return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
+        }
     }
 
 }

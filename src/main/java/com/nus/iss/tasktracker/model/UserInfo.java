@@ -1,6 +1,7 @@
 package com.nus.iss.tasktracker.model;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Getter;
@@ -22,5 +23,14 @@ public class UserInfo {
     @Getter
     @Setter
     private  String password;
+
+    @Getter
+    @Setter
+    private  String role;
+
+    @Getter
+    @Setter
+    @Column(name = "delete_flag")
+    private String deleteFlag;
 
 }
