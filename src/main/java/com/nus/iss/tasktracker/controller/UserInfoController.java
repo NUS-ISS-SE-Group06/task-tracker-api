@@ -34,12 +34,11 @@ public class UserInfoController {
         if (userDTO !=  null){
             responseBody = userDTO;
             successOrFailMessage = "Logon successfully.";
+            return CustomResponseHandler.handleSuccessResponse(responseBody, status, successOrFailMessage);
         } else {
             successOrFailMessage ="Invalid Credential.";
+            return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
         }
-
-        return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
-
     }
 
 }
