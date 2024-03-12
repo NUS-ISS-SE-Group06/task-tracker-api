@@ -63,19 +63,8 @@
 					}
 				],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "username",
-							"value": "william",
-							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "william",
-							"type": "text"
-						}
-					]
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"user1\",\n    \"password\": \"password1\"\n}"
 				},
 				"url": {
 					"raw": "http://localhost:8688/api/userinfo/login",
@@ -88,6 +77,32 @@
 						"api",
 						"userinfo",
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ZZ_VALIDATE_TOKEN",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJ1c2VyMSIsImF1dGgiOiJST0xFX0FETUlOIiwianRpIjoiNzFkYTdiNGEtMTZmOC00ZjdjLTliNWYtODViNTJmMjI3MjExIiwiaWF0IjoxNzEwMjgxMjMwLCJleHAiOjE3MTAyODE4MzB9.Pm6F3mEeyXYhMybZ4s3t2zSEoK7QjX8Wd1jcB5rDpn4ioJ2smWI-jzWfLENtnsCUI9192vMJneZ66uB-O-vvxA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8688/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8688",
+					"path": [
+						"api",
+						"user"
 					]
 				}
 			},

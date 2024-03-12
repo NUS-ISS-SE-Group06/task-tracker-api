@@ -53,6 +53,8 @@ public class JWTUtil {
 
     public boolean validateJWT(String jwtString){
         boolean isTokenValid = true;
+
+        //FIXME - REPLACE DEPRECATED APIs
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
                 SignatureAlgorithm.HS512.getJcaName());
         System.out.println("hmacKey: "+hmacKey);
@@ -72,7 +74,6 @@ public class JWTUtil {
             isTokenValid = false;
         }
 
-        // FIXME - CHECK WHETHER THE TOKEN IS VALID
         return isTokenValid;
     }
 
