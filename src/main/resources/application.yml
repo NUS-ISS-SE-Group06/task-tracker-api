@@ -20,7 +20,7 @@ spring:
 
 task-tracker:
   jwt:
-    secret: NUS-ISS
+    secret: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
     expirationTimeInMins: 10
 
 
