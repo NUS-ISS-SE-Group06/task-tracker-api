@@ -5,6 +5,7 @@ import com.nus.iss.tasktracker.dto.Response;
 import com.nus.iss.tasktracker.dto.UserDTO;
 import com.nus.iss.tasktracker.service.UserInfoService;
 import com.nus.iss.tasktracker.util.CustomResponseHandler;
+import com.nus.iss.tasktracker.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,13 @@ import lombok.extern.slf4j.Slf4j;
 public class UserInfoController {
 
     private final UserInfoService userInfoService;
+
+    private final JWTUtil jwtUtil;
+
     @Autowired
-    public UserInfoController(UserInfoService userInfoService) {
+    public UserInfoController(UserInfoService userInfoService, JWTUtil jwtUtil) {
         this.userInfoService = userInfoService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/login")
@@ -34,6 +39,8 @@ public class UserInfoController {
         if (userDTO !=  null){
             responseBody = userDTO;
             successOrFailMessage = "Logon successfully.";
+            //TO CREATE NEW AUTH TOKEN AND SEND IT AS PART OF LOGIN RESPONSE
+            jwtUtil.createJWT(userDTO);
             return CustomResponseHandler.handleSuccessResponse(responseBody, status, successOrFailMessage);
         } else {
             successOrFailMessage ="Invalid Credential.";

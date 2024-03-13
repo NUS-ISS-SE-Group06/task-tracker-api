@@ -1,19 +1,32 @@
 package com.nus.iss.tasktracker.interceptor;
 
+import com.nus.iss.tasktracker.util.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Enumeration;
 import java.util.List;
 
+@Component
 public class TaskTrackerInterceptor implements HandlerInterceptor{
+
+    private final JWTUtil jwtUtil;
+
+    @Autowired
+    public TaskTrackerInterceptor(JWTUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
+        boolean isTokenValid = true;
         String token = null;
         // This method is called before the controller method is invoked.
         // You can perform pre-processing here.
@@ -31,12 +44,23 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
 
         System.out.println("Token Value: "+token);
 
-        // FIXME
+
         // DO TOKEN VALIDATION
         // THROW ERROR IF THE TOKEN IS EMPTY OR THE VALIDATION FAILS
-//        if(token == null){
-//            throw new Exception("No Token");
-//        }
+        if( token == null){
+            System.out.println("TOKEN IS EMPTY");
+            // FIXME
+            //throw new Exception("No Token");
+        } else{
+            isTokenValid = jwtUtil.validateJWT(token);
+        }
+
+        System.out.println("Token valid: "+isTokenValid);
+
+        if(!isTokenValid){
+            throw new RuntimeException("Auth Token Validation Failed");
+        }
+
         return true; // Return true to continue with the execution chain, or false to stop it.
     }
 

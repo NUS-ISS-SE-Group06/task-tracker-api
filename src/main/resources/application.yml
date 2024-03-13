@@ -18,4 +18,9 @@ spring:
     restart:
       enabled: true
 
+task-tracker:
+  jwt:
+    secret: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890
+    expirationTimeInMins: 10
+
 
