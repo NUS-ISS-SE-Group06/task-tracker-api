@@ -6,4 +6,6 @@ import com.nus.iss.tasktracker.dto.UserDTO;
 public interface GroupInfoService {
 
     public GroupDTO getGroupById(int groupId);
+
+    public GroupDTO createGroup(GroupDTO groupDTO);
 }

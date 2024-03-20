@@ -89,7 +89,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJ1c2VyMSIsImF1dGgiOiJST0xFX0FETUlOIiwianRpIjoiNzFkYTdiNGEtMTZmOC00ZjdjLTliNWYtODViNTJmMjI3MjExIiwiaWF0IjoxNzEwMjgxMjMwLCJleHAiOjE3MTAyODE4MzB9.Pm6F3mEeyXYhMybZ4s3t2zSEoK7QjX8Wd1jcB5rDpn4ioJ2smWI-jzWfLENtnsCUI9192vMJneZ66uB-O-vvxA",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJ1c2VyMSIsImF1dGgiOiJST0xFX1VTRVIiLCJqdGkiOiJlMTE2NDdlYi0zMzE2LTRiMGMtYmVlZC1jNzVmZWNmMTMwODMiLCJpYXQiOjE3MTA5NTM2NDYsImV4cCI6MTcxMDk1NDI0Nn0.xNg0BsWlCNI6bz1BflAEIvpVwf-Id5t9cNDZykSaSNnbkN6Xh4oQbSsLTyi4Nehq_d0RmK4jhRVHn8UvEe7Dqw",
 						"type": "text"
 					}
 				],
@@ -114,7 +114,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8688/api/group-info/1",
+					"raw": "http://localhost:8688/api/group-info/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -123,7 +123,37 @@
 					"path": [
 						"api",
 						"group-info",
-						"1"
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateGroup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"groupName\": \"Group Test\",\n    \"groupDescription\": \"Description for Group Test\",\n    \"createdBy\": \"SiBa\",\n    \"deleteFlag\": \"FALSE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8688/api/group-info/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8688",
+					"path": [
+						"api",
+						"group-info",
+						"create"
 					]
 				}
 			},

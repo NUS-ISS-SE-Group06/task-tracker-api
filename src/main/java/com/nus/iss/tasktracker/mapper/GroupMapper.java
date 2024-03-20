@@ -9,4 +9,6 @@ public interface GroupMapper {
 
     GroupDTO groupInfoToGroupDTO(GroupInfo groupInfo);
 
+    GroupInfo groupDTOToGroupInfo(GroupDTO groupDTO);
+
 }

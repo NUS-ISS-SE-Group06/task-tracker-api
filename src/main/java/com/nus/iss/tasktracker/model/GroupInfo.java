@@ -1,8 +1,6 @@
 package com.nus.iss.tasktracker.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +12,8 @@ public class GroupInfo {
     @Setter
     @Id
     @Column(name = "groupid")
-    private int groupId;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Long groupId;
 
     @Getter
     @Setter
@@ -28,7 +27,12 @@ public class GroupInfo {
 
     @Getter
     @Setter
-    @Column(name = "delete_flag")
+    @Column(name = "createdby")
+    private  String createdBy;
+
+    @Getter
+    @Setter
+    @Column(name = "deleteflag")
     private String deleteFlag;
 
 }
