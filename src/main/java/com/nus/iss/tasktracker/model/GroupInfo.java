@@ -1,6 +1,5 @@
 package com.nus.iss.tasktracker.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -8,24 +7,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-public class UserInfo {
+public class GroupInfo {
+
 
     @Getter
     @Setter
     @Id
-    private int userid;
+    @Column(name = "groupid")
+    private int groupId;
 
     @Getter
     @Setter
-    private String username;
+    @Column(name = "groupname")
+    private String groupName;
 
     @Getter
     @Setter
-    private  String password;
-
-    @Getter
-    @Setter
-    private  String role;
+    @Column(name = "groupdescription")
+    private  String groupDescription;
 
     @Getter
     @Setter

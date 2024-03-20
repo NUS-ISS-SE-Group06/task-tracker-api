@@ -107,6 +107,27 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GetGroupInfo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8688/api/group-info/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8688",
+					"path": [
+						"api",
+						"group-info",
+						"1"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
