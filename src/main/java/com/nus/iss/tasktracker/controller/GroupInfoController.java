@@ -26,17 +26,31 @@ public class GroupInfoController {
 
 
     @GetMapping("/{id}")
-    public GroupDTO getGroupById(@PathVariable int id){
+    @CrossOrigin(origins = "http://localhost:3005")
+    public ResponseEntity<Response> getGroupById(@PathVariable int id) throws RuntimeException{
         log.info("Group endpoint called with id {}", id);
-        return groupInfoService.getGroupById(id);
+        Object responseBody=null;
+        HttpStatus status = HttpStatus.OK;
+        String successOrFailMessage="";
+
+        GroupDTO groupDTO = groupInfoService.getGroupById(id);
+
+        if (groupDTO !=  null){
+            responseBody = groupDTO;
+            successOrFailMessage = "Group Info Retrieved successfully.";
+            return CustomResponseHandler.handleSuccessResponse(responseBody, status, successOrFailMessage);
+        } else {
+            successOrFailMessage ="Group Info Retrieval Failed.";
+            return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
+        }
     }
 
     @PostMapping("/create")
     @CrossOrigin(origins = "http://localhost:3005")
-    public ResponseEntity<Response> login(@RequestBody GroupDTO requestDTO) throws RuntimeException {
-        System.out.println("requestDTO: "+requestDTO);
+    public ResponseEntity<Response> createGroup(@RequestBody GroupDTO requestDTO) throws RuntimeException {
+        log.info("requestDTO: "+requestDTO);
         requestDTO.setGroupId(null);
-        System.out.println("requestDTO updated: "+requestDTO);
+        log.info("requestDTO updated: "+requestDTO);
         GroupDTO groupDTO= groupInfoService.createGroup(requestDTO);
         log.info("groupDTO : {}", groupDTO);
         Object responseBody=null;
@@ -52,7 +66,5 @@ public class GroupInfoController {
             return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
         }
     }
-
-
 
 }
