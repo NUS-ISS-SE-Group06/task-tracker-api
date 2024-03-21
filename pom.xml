@@ -116,6 +116,7 @@
 			<version>${springboot.starter.version}</version>
 		</dependency>
 
+		<!-- Spring Boot Starter Data JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -141,12 +142,6 @@
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>${sqlite.version}</version>
-		</dependency>
-
-		<!-- Spring Boot Starter Data JPA -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-community-dialects -->
