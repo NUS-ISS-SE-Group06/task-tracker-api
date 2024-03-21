@@ -2,6 +2,7 @@ package com.nus.iss.tasktracker.controller;
 
 import com.nus.iss.tasktracker.dto.UserDTO;
 import com.nus.iss.tasktracker.service.impl.UserInfoServiceImpl;
+import com.nus.iss.tasktracker.util.JWTUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,8 +20,12 @@ import static org.hamcrest.Matchers.nullValue;
 class UserInfoControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private UserInfoServiceImpl userInfoService;
+
+    @MockBean
+    private JWTUtil jwtUtil;
 
     @Test
     void testLogin_ValidCredentials() throws  Exception{
