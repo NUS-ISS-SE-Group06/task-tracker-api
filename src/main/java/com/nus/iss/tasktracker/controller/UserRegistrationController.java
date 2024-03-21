@@ -37,6 +37,33 @@ public class UserRegistrationController {
         return CustomResponseHandler.handleSuccessResponse(responseBody, status, successMessage);
     }
 
+    @PostMapping(value = "/signup")
+    @CrossOrigin(origins = "http://localhost:3000")
+    public ResponseEntity<Response> signUp(@RequestBody UserDTO requestDTO) throws RuntimeException {
+        UserDTO userDTO=null;
+        Object responseBody=null;
+        HttpStatus status = HttpStatus.OK;
+        String successOrFailMessage="";
+
+        try {
+            userDTO=userRegistrationService.signUp(requestDTO);
+        } catch(Exception e) {
+            successOrFailMessage = e.getMessage();
+        }
+
+        log.info("userDTO : {}", userDTO);
+
+        if (userDTO !=  null){
+            responseBody = userDTO;
+            successOrFailMessage = "SignUp successfully.";
+            return CustomResponseHandler.handleSuccessResponse(responseBody, status, successOrFailMessage);
+        } else {
+            return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
+        }
+
+
+    }
+
 
 
 }

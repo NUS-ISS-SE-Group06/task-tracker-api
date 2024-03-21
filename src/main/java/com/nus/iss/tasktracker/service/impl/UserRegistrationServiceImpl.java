@@ -1,13 +1,20 @@
 package com.nus.iss.tasktracker.service.impl;
 
+import com.nus.iss.tasktracker.dto.GroupDTO;
 import com.nus.iss.tasktracker.dto.UserDTO;
 import com.nus.iss.tasktracker.mapper.UserMapper;
+import com.nus.iss.tasktracker.model.GroupInfo;
 import com.nus.iss.tasktracker.model.UserInfo;
+import com.nus.iss.tasktracker.repository.GroupInfoRepository;
 import com.nus.iss.tasktracker.repository.UserInfoRepository;
+import com.nus.iss.tasktracker.service.GroupInfoService;
 import com.nus.iss.tasktracker.service.UserRegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.Timestamp;
+import java.util.Objects;
 
 
 @Service
@@ -15,6 +22,7 @@ import org.springframework.stereotype.Service;
 public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     private  final UserInfoRepository userInfoRepository;
+    //private final GroupInfoRepository groupInfoRepository;
 
     private final UserMapper userMapper;
 
@@ -23,9 +31,10 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
 @Autowired
     // FIXME - REMOVE THE BELOW DUMMY CONSTRUCTOR CODE ONCE userInfoRepository CODE IS WRITTEN
-    public UserRegistrationServiceImpl(UserInfoRepository userInfoRepository, UserMapper userMapper) {
+    public UserRegistrationServiceImpl(UserInfoRepository userInfoRepository, UserMapper userMapper, GroupInfoRepository groupInfoRepository) {
         this.userInfoRepository = userInfoRepository;
         this.userMapper = userMapper;
+        //this.groupInfoRepository=groupInfoRepository;
     }
 
     @Override
@@ -71,9 +80,49 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         }
 
         // Only update userEntity if all validations pass
-        userEntity = userMapper.mapChangePasswordRequestDTOToUser(userEntity, requestDTO);
+        //userEntity = userMapper.mapChangePasswordRequestDTOToUser(userEntity, requestDTO);
+        userEntity = userMapper.mapChangePasswordRequestDTOToUser(requestDTO);
         userEntity.setPassword(newPassword);
         userInfoRepository.save(userEntity);
+
+    }
+
+    @Override
+    public UserDTO signUp(UserDTO requestDTO){
+
+        if(Objects.equals(requestDTO.getName(), "")){
+            throw new RuntimeException("Name - Please input value!");
+        }
+
+        if(Objects.equals(requestDTO.getEmail(), "")){
+            throw new RuntimeException("Email - Please input value!");
+        }
+
+        if(Objects.equals(requestDTO.getUsername(), "")){
+            throw new RuntimeException("Username - Please input value!");
+        }
+
+        if(Objects.equals(requestDTO.getPassword(), "")){
+            throw new RuntimeException("Password - Please input value!");
+        }
+
+        boolean isExists = userInfoRepository.existsByUsername(requestDTO.getUsername());
+        if(isExists){
+            throw new RuntimeException("Username not available!");
+        }
+
+        UserInfo userEntity=userMapper.mapChangePasswordRequestDTOToUser(requestDTO);
+        userEntity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
+        userEntity.setDeleteFlag("FALSE");
+        userEntity.setPasswordChangeMandatory("FALSE");
+        UserDTO output= userMapper.userEntityToUserDTO(userInfoRepository.save(userEntity));
+        output.setPassword(null);
+        output.setOldPassword(null);
+        output.setNewPassword(null);
+        output.setAuthToken(null);
+        output.setCreatedBy(null);
+
+        return output;
 
     }
 
