@@ -105,6 +105,14 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         if(Objects.equals(requestDTO.getPassword(), "")){
             throw new RuntimeException("Password - Please input value!");
         }
+/*
+        if (requestDTO.getPassword().length() < 8 || !requestDTO.getPassword().matches(".*[a-zA-Z].*\\d.*")) {
+            throw new RuntimeException("""
+        Invalid Password. Password must be at least 8 characters long
+        and contain a combination of letters, numbers, and special characters.
+        """);
+        }
+*/
 
         boolean isExists = userInfoRepository.existsByUsername(requestDTO.getUsername());
         if(isExists){
