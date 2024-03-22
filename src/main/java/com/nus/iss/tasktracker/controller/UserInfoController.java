@@ -29,7 +29,7 @@ public class UserInfoController {
     }
 
     @PostMapping("/login")
-    @CrossOrigin(origins = "http://localhost:3005")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Response> login(@RequestBody UserDTO requestDTO) throws RuntimeException {
         UserDTO userDTO= userInfoService.UserLogin(requestDTO);
         log.info("userDTO : {}", userDTO);

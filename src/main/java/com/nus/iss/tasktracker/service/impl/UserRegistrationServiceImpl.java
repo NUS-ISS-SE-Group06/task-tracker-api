@@ -1,13 +1,10 @@
 package com.nus.iss.tasktracker.service.impl;
 
-import com.nus.iss.tasktracker.dto.GroupDTO;
 import com.nus.iss.tasktracker.dto.UserDTO;
 import com.nus.iss.tasktracker.mapper.UserMapper;
-import com.nus.iss.tasktracker.model.GroupInfo;
 import com.nus.iss.tasktracker.model.UserInfo;
 import com.nus.iss.tasktracker.repository.GroupInfoRepository;
 import com.nus.iss.tasktracker.repository.UserInfoRepository;
-import com.nus.iss.tasktracker.service.GroupInfoService;
 import com.nus.iss.tasktracker.service.UserRegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +44,8 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         // FIXME - REMOVE THE BELOW DUMMY LINES OF CODE ONCE userInfoRepository CODE IS WRITTEN
         // DUMMY CODE START
         UserInfo userEntity = new UserInfo();
-        userEntity.setUserid(userid);
-       userEntity.setUserid(1);
+        userEntity.setUserId(userid);
+       userEntity.setUserId(1);
        // userEntity.setUserRole("ADMIN");
         // DUMMY CODE END
 
