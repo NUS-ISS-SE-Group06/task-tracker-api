@@ -5,7 +5,6 @@ import com.nus.iss.tasktracker.model.UserInfo;
 import com.nus.iss.tasktracker.mapper.UserMapper;
 import com.nus.iss.tasktracker.repository.UserInfoRepository;
 import com.nus.iss.tasktracker.service.impl.UserInfoServiceImpl;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,7 +31,7 @@ class UserInfoServiceImplTest {
     void testUserLogin_ValidUser(){
 
         UserInfo userEntity=new UserInfo();
-        userEntity.setUserid(1);
+        userEntity.setUserId(1);
         userEntity.setUsername("User1");
         userEntity.setPassword("password1");
         userEntity.setRole("ROLE_USER");
