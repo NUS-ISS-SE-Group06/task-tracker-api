@@ -1,15 +1,18 @@
 package com.nus.iss.tasktracker.service.impl;
 
+import com.nus.iss.tasktracker.dto.GroupDTO;
 import com.nus.iss.tasktracker.dto.UserDTO;
 import com.nus.iss.tasktracker.mapper.UserMapper;
 import com.nus.iss.tasktracker.model.UserInfo;
-import com.nus.iss.tasktracker.repository.GroupInfoRepository;
 import com.nus.iss.tasktracker.repository.UserInfoRepository;
+import com.nus.iss.tasktracker.service.GroupInfoService;
 import com.nus.iss.tasktracker.service.UserRegistrationService;
+import com.nus.iss.tasktracker.util.TaskTrackerConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -19,19 +22,15 @@ import java.util.Objects;
 public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     private  final UserInfoRepository userInfoRepository;
-    //private final GroupInfoRepository groupInfoRepository;
-
+    private final GroupInfoService groupInfoService;
     private final UserMapper userMapper;
 
-    // FIXME - UNCOMMENT THE BELOW CONSTRUCTOR CODE ONCE userInfoRepository CODE IS WRITTEN
-
-
 @Autowired
-    // FIXME - REMOVE THE BELOW DUMMY CONSTRUCTOR CODE ONCE userInfoRepository CODE IS WRITTEN
-    public UserRegistrationServiceImpl(UserInfoRepository userInfoRepository, UserMapper userMapper, GroupInfoRepository groupInfoRepository) {
+
+    public UserRegistrationServiceImpl(UserInfoRepository userInfoRepository, UserMapper userMapper, GroupInfoService groupInfoService) {
         this.userInfoRepository = userInfoRepository;
+        this.groupInfoService = groupInfoService;
         this.userMapper = userMapper;
-        //this.groupInfoRepository=groupInfoRepository;
     }
 
     @Override
@@ -87,44 +86,69 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     @Override
     public UserDTO signUp(UserDTO requestDTO){
 
+        // FIXME - DO NULL CHECKS ALSO PLEASE
         if(Objects.equals(requestDTO.getName(), "")){
-            throw new RuntimeException("Name - Please input value!");
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Name"));
         }
 
         if(Objects.equals(requestDTO.getEmail(), "")){
-            throw new RuntimeException("Email - Please input value!");
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Email"));
+        }
+
+        if(Objects.equals(requestDTO.getGroupName(), "")){
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Group Name"));
+        }
+
+        if (requestDTO.getGroupName().length() < 6 || !requestDTO.getGroupName().matches("^(?! )[0-9A-Za-z](?!.* $)[0-9A-Za-z\\s]{0,18}(?<! )$")) {
+            throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_GROUP_NAME);
         }
 
         if(Objects.equals(requestDTO.getUsername(), "")){
-            throw new RuntimeException("Username - Please input value!");
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Username"));
         }
 
         if(Objects.equals(requestDTO.getPassword(), "")){
-            throw new RuntimeException("Password - Please input value!");
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Password"));
         }
 
         if (requestDTO.getPassword().length() < 8 || !requestDTO.getPassword().matches(".*[a-zA-Z].*\\d.*")) {
-            throw new RuntimeException("""
-        Invalid Password. Password must be at least 8 characters long
-        and contain a combination of letters, numbers, and special characters.
-        """);
+            throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_INPUT_PASSWORD);
         }
 
         boolean isExists = userInfoRepository.existsByUsername(requestDTO.getUsername());
         if(isExists){
-            throw new RuntimeException("Username not available!");
+            throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_INPUT_USERNAME_UNAVAILABLE);
         }
 
-        UserInfo userEntity=userMapper.mapChangePasswordRequestDTOToUser(requestDTO);
-        userEntity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        userEntity.setDeleteFlag("FALSE");
-        userEntity.setPasswordChangeMandatory("FALSE");
+        // STORING GROUP FIRST TO GET GROUP ID
+        GroupDTO groupDTO = new GroupDTO();
+        groupDTO.setGroupName(requestDTO.getGroupName());
+        groupDTO.setGroupDescription(requestDTO.getGroupName());
+        groupDTO.setCreatedBy(TaskTrackerConstant.TASK_ADMIN);
+        groupDTO.setModifiedBy(TaskTrackerConstant.TASK_ADMIN);
+
+        groupDTO.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
+        System.out.println("groupDTO: "+groupDTO);
+        GroupDTO groupDTOResponse = groupInfoService.createGroup(groupDTO);
+        System.out.println("groupDTOResponse: "+groupDTOResponse);
+
+        System.out.println("requestDTO: "+requestDTO);
+        UserInfo userEntity=userMapper.userDTOToUserInfo(requestDTO);
+        System.out.println("userEntity: "+userEntity);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        userEntity.setGroupId(groupDTOResponse.getGroupId());
+        userEntity.setCreatedBy(TaskTrackerConstant.TASK_ADMIN);
+        userEntity.setCreatedDate(timestamp);
+        userEntity.setModifiedBy(TaskTrackerConstant.TASK_ADMIN);
+        userEntity.setModifiedDate(timestamp);
+        userEntity.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
+        userEntity.setPasswordChangeMandatory(TaskTrackerConstant.TASK_PASSWORD_CHANGE_MANDATORY_FALSE);
         UserDTO output= userMapper.userEntityToUserDTO(userInfoRepository.save(userEntity));
         output.setPassword(null);
         output.setOldPassword(null);
         output.setNewPassword(null);
         output.setAuthToken(null);
-        output.setCreatedBy(null);
 
         return output;
 

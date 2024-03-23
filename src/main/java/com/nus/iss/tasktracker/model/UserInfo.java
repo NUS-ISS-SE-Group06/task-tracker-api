@@ -64,7 +64,6 @@ public class UserInfo {
     @Setter
     private String deleteFlag;
 
-
     @Getter
     @Setter
     @Transient

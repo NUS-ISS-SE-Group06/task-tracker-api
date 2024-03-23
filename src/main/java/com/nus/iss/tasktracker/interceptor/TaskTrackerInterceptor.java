@@ -31,19 +31,12 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
         // This method is called before the controller method is invoked.
         // You can perform pre-processing here.
         System.out.println("Pre-handle method is called - for URL: "+ request.getRequestURI()+"; Method: "+request.getMethod());
-        for (Enumeration en = request.getHeaderNames(); en.hasMoreElements();) {
-            String key = (String) en.nextElement();
-            String val = request.getHeader(key);
-            System.out.println("header: " + key + "=" + val);
-        }
+
         if(request.getHeader("Authorization")!=null){
             token = request.getHeader("Authorization");
             System.out.println("Authorization header value: " + token);
             token = token.replaceAll("Bearer ", "");
         }
-
-        System.out.println("Token Value: "+token);
-
 
         // DO TOKEN VALIDATION
         // THROW ERROR IF THE TOKEN IS EMPTY OR THE VALIDATION FAILS
@@ -52,6 +45,7 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
             // FIXME
             //throw new Exception("No Token");
         } else{
+            System.out.println("TOKEN IS "+token);
             isTokenValid = jwtUtil.validateJWT(token);
         }
 
@@ -69,7 +63,6 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
                            ModelAndView modelAndView) throws Exception {
         // This method is called after the controller method is invoked, but before the view is rendered.
         // You can perform post-processing here.
-        System.out.println("Post-handle method is called; No custom implementation available");
     }
 
     @Override
@@ -77,6 +70,5 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
                                 Exception ex) throws Exception {
         // This method is called after the view is rendered.
         // You can perform cleanup activities here.
-        System.out.println("After-completion method is called; No custom implementation available");
     }
 }
