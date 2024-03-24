@@ -69,7 +69,7 @@ class UserRegistrationControllerTest {
                 .andExpect(status().isOk())
 
                 .andExpect(jsonPath("$.body.userId").value(1))
-                .andExpect(jsonPath("$.body.groupId").value(0))
+                .andExpect(jsonPath("$.body.groupId").value(nullValue()))
                 .andExpect(jsonPath("$.body.email").value("User1@test.test"))
                 .andExpect(jsonPath("$.body.name").value("Firstname1 Lastname1"))
                 .andExpect(jsonPath("$.body.username").value("user1"))

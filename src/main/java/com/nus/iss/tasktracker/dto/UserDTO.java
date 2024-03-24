@@ -6,9 +6,9 @@ import lombok.Data;
 @Data
 public class UserDTO {
 
-    private long userId;
+    private Integer userId;
 
-    private long groupId;
+    private Integer groupId;
 
     private String email;
 

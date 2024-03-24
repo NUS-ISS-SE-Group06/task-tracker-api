@@ -1,18 +1,18 @@
 package com.nus.iss.tasktracker.mapper;
 
-import com.nus.iss.tasktracker.dto.GroupDTO;
-import com.nus.iss.tasktracker.model.GroupInfo;
+import com.nus.iss.tasktracker.dto.TaskDTO;
+import com.nus.iss.tasktracker.model.TaskInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface GroupMapper {
+public interface TaskMapper {
 
-    GroupDTO groupInfoToGroupDTO(GroupInfo groupInfo);
+    TaskDTO taskInfoToTaskDTO(TaskInfo taskInfo);
 
     @Mapping(ignore = true, target = "createdDate")
     @Mapping(ignore = true, target = "modifiedDate")
     @Mapping(ignore = true, target = "deleteFlag")
-    GroupInfo groupDTOToGroupInfo(GroupDTO groupDTO);
+    TaskInfo taskDTOToTaskInfo(TaskDTO taskDTO);
 
 }

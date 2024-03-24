@@ -3,7 +3,6 @@ package com.nus.iss.tasktracker.controller;
 
 import com.nus.iss.tasktracker.dto.GroupDTO;
 import com.nus.iss.tasktracker.dto.Response;
-import com.nus.iss.tasktracker.dto.UserDTO;
 import com.nus.iss.tasktracker.service.GroupInfoService;
 import com.nus.iss.tasktracker.util.CustomResponseHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +48,6 @@ public class GroupInfoController {
     @CrossOrigin(origins = "http://localhost:3005")
     public ResponseEntity<Response> createGroup(@RequestBody GroupDTO requestDTO) throws RuntimeException {
         log.info("requestDTO: "+requestDTO);
-        requestDTO.setGroupId(null);
         log.info("requestDTO updated: "+requestDTO);
         GroupDTO groupDTO= groupInfoService.createGroup(requestDTO);
         log.info("groupDTO : {}", groupDTO);

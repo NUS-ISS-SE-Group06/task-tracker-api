@@ -8,11 +8,11 @@ import com.nus.iss.tasktracker.repository.UserInfoRepository;
 import com.nus.iss.tasktracker.service.GroupInfoService;
 import com.nus.iss.tasktracker.service.UserRegistrationService;
 import com.nus.iss.tasktracker.util.TaskTrackerConstant;
+import org.springframework.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Objects;
 
@@ -85,33 +85,35 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     @Override
     public UserDTO signUp(UserDTO requestDTO){
 
-        // FIXME - DO NULL CHECKS ALSO PLEASE
-        if(Objects.equals(requestDTO.getName(), "")){
+        if(!StringUtils.hasText(requestDTO.getName())){
             throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Name"));
         }
 
-        if(Objects.equals(requestDTO.getEmail(), "")){
+        if(!StringUtils.hasText(requestDTO.getEmail())){
             throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Email"));
         }
 
-        if(Objects.equals(requestDTO.getGroupName(), "")){
+
+        if(!StringUtils.hasText(requestDTO.getGroupName())){
             throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Group Name"));
+        }else {
+
+            if ( requestDTO.getGroupName().length() < 6 || !requestDTO.getGroupName().matches("^(?! )[0-9A-Za-z](?!.* $)[0-9A-Za-z\\s]{0,18}(?<! )$")) {
+                throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_GROUP_NAME);
+            }
         }
 
-        if (requestDTO.getGroupName().length() < 6 || !requestDTO.getGroupName().matches("^(?! )[0-9A-Za-z](?!.* $)[0-9A-Za-z\\s]{0,18}(?<! )$")) {
-            throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_GROUP_NAME);
-        }
 
-        if(Objects.equals(requestDTO.getUsername(), "")){
+        if(!StringUtils.hasText(requestDTO.getUsername())){
             throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Username"));
         }
 
-        if(Objects.equals(requestDTO.getPassword(), "")){
+        if(!StringUtils.hasText(requestDTO.getPassword())){
             throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Password"));
-        }
-
-        if (requestDTO.getPassword().length() < 8 || !requestDTO.getPassword().matches(".*[a-zA-Z].*\\d.*")) {
-            throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_INPUT_PASSWORD);
+        } else {
+            if (requestDTO.getPassword().length() < 8 || !requestDTO.getPassword().matches(".*[a-zA-Z].*\\d.*")) {
+                throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_INPUT_PASSWORD);
+            }
         }
 
         boolean isExists = userInfoRepository.existsByUsername(requestDTO.getUsername());
