@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.sql.Timestamp;
+
 @Entity
 public class GroupInfo {
 
@@ -29,6 +31,11 @@ public class GroupInfo {
     @Setter
     @Column(name = "createdby")
     private  String createdBy;
+
+    @Getter
+    @Setter
+    @Column(name = "modifiedby")
+    private  String modifiedBy;
 
     @Getter
     @Setter

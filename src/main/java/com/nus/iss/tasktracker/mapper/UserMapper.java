@@ -18,6 +18,7 @@ public interface UserMapper {
     @Mapping(source = "userRole", target = "role")
     UserInfo mapChangePasswordRequestDTOToUser(UserDTO requestDTO);
 
-
+    @Mapping(source = "userRole", target = "role")
+    UserInfo userDTOToUserInfo(UserDTO userDTO);
 
 }

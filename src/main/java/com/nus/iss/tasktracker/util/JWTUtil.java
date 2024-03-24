@@ -16,10 +16,10 @@ import java.util.UUID;
 @Component
 public class JWTUtil {
 
-    @Value("${task-tracker.jwt.secret:" + TaskTrackerConstant.JWT_SECRET + "}")
+    @Value("${task-tracker.jwt.secret:" + TaskTrackerConstant.JWT_MAGIC_WORD + "}")
     private String secret;
 
-    @Value("${task-tracker.jwt.expirationTimeInMins:" + TaskTrackerConstant.JWT_EXPIRATION_MINS + "}")
+    @Value("${task-tracker.jwt.expirationTimeInMins:" + TaskTrackerConstant.JWT_EXPIRATION_MINUTES + "}")
     private int jwtTokenExpiryInMins;
 
     public void createJWT(UserDTO userDTO)  {
