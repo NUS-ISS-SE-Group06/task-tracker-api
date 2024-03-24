@@ -51,8 +51,8 @@ public class JWTUtil {
         userDTO.setAuthToken(jwtToken);
     }
 
-    public boolean validateJWT(String jwtString){
-        boolean isTokenValid = true;
+    public String validateJWT(String jwtString){
+        String subjectValue = null;
 
         //FIXME - REPLACE DEPRECATED APIs
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
@@ -64,17 +64,18 @@ public class JWTUtil {
                     .setSigningKey(hmacKey)
                     .build()
                     .parseClaimsJws(jwtString);
-            System.out.println("jwt: "+jwt);
-            System.out.println("jwt: "+jwt.getPayload().getExpiration());
+            System.out.println("jwt token: "+jwt);
+            System.out.println("jwt token expiration: "+jwt.getPayload().getExpiration());
+            subjectValue = jwt.getPayload().getSubject();
+            System.out.println("jwt token subject / username: "+subjectValue);
+
         } catch(ExpiredJwtException expiredJwtException){
             System.out.println("Auth Token Expired: "+expiredJwtException.getMessage());
-            isTokenValid = false;
         } catch(io.jsonwebtoken.security.SignatureException signatureException){
             System.out.println("Signature validation failed: "+signatureException.getMessage());
-            isTokenValid = false;
         }
 
-        return isTokenValid;
+        return subjectValue;
     }
 
 }

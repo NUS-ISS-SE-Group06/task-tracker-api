@@ -3,7 +3,9 @@ package com.nus.iss.tasktracker.service.impl;
 import com.nus.iss.tasktracker.dto.GroupDTO;
 import com.nus.iss.tasktracker.mapper.GroupMapper;
 import com.nus.iss.tasktracker.model.GroupInfo;
+import com.nus.iss.tasktracker.model.UserInfo;
 import com.nus.iss.tasktracker.repository.GroupInfoRepository;
+import com.nus.iss.tasktracker.repository.UserInfoRepository;
 import com.nus.iss.tasktracker.service.GroupInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,13 @@ public class GroupInfoServiceImpl implements GroupInfoService {
     private  final GroupInfoRepository groupInfoRepository;
     private final GroupMapper groupMapper;
 
+    private  final UserInfoRepository userInfoRepository;
+
     @Autowired
-    public GroupInfoServiceImpl(GroupInfoRepository groupInfoRepository, GroupMapper groupMapper) {
+    public GroupInfoServiceImpl(GroupInfoRepository groupInfoRepository, GroupMapper groupMapper, UserInfoRepository userInfoRepository) {
         this.groupInfoRepository = groupInfoRepository;
         this.groupMapper = groupMapper;
+        this.userInfoRepository = userInfoRepository;
     }
 
     @Override
@@ -48,4 +53,15 @@ public class GroupInfoServiceImpl implements GroupInfoService {
         log.debug("Group DTO {}",groupDTOResponse);
         return groupDTOResponse;
     }
+
+    @Override
+    public GroupDTO getGroupByUserName(String userName) {
+        log.info("getGroupByUserId called in GroupInfoServiceImpl with userName {}", userName);
+        UserInfo userEntity = userInfoRepository.findByUsername(userName);
+        System.out.println("userEntity: "+userEntity);
+        GroupDTO groupDTO = getGroupById(userEntity.getGroupId());
+        System.out.println("groupDTO: "+groupDTO);
+        return groupDTO;
+    }
+
 }

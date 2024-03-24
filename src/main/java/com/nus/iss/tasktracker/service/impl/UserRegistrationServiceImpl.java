@@ -2,6 +2,7 @@ package com.nus.iss.tasktracker.service.impl;
 
 import com.nus.iss.tasktracker.dto.GroupDTO;
 import com.nus.iss.tasktracker.dto.UserDTO;
+import com.nus.iss.tasktracker.interceptor.TaskTrackerInterceptor;
 import com.nus.iss.tasktracker.mapper.UserMapper;
 import com.nus.iss.tasktracker.model.UserInfo;
 import com.nus.iss.tasktracker.repository.UserInfoRepository;
@@ -82,8 +83,12 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     }
 
+    // THIS SIGNUP METHOD IS USED FOR BOTH ADMIN REGISTRATION DONE FROM PRE LOGIN AND FOR USER REGISTRATION DONE FROM POST LOGIN BY ADMIN
     @Override
     public UserDTO signUp(UserDTO requestDTO){
+
+        String loggedInUserName = TaskTrackerInterceptor.getLoggedInUserName();
+        System.out.println("loggedInUserName: "+loggedInUserName);
 
         if(!StringUtils.hasText(requestDTO.getName())){
             throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Name"));
@@ -93,19 +98,23 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
             throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Email"));
         }
 
+        if(!StringUtils.hasText(requestDTO.getUserRole())){
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "User Role"));
+        }
 
         if(!StringUtils.hasText(requestDTO.getGroupName())){
-            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Group Name"));
+            // THROW THE ERROR IF THE GROUP NAME IS EMPTY AND SIGNUP IS HAPPENING FROM PRE-LOGIN
+            if (!StringUtils.hasText(loggedInUserName)){
+                throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Group Name"));
+            }
         }else {
-
             if ( requestDTO.getGroupName().length() < 6 || !requestDTO.getGroupName().matches("^(?! )[0-9A-Za-z](?!.* $)[0-9A-Za-z\\s]{0,18}(?<! )$")) {
                 throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_GROUP_NAME);
             }
         }
 
-
         if(!StringUtils.hasText(requestDTO.getUsername())){
-            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Username"));
+                throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Username"));
         }
 
         if(!StringUtils.hasText(requestDTO.getPassword())){
@@ -121,19 +130,25 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
             throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_INPUT_USERNAME_UNAVAILABLE);
         }
 
-        // STORING GROUP FIRST TO GET GROUP ID
-        GroupDTO groupDTO = new GroupDTO();
-        groupDTO.setGroupName(requestDTO.getGroupName());
-        groupDTO.setGroupDescription(requestDTO.getGroupName());
-        groupDTO.setCreatedBy(TaskTrackerConstant.TASK_ADMIN);
-        groupDTO.setModifiedBy(TaskTrackerConstant.TASK_ADMIN);
+        System.out.println("requestDTO: "+requestDTO);
+        GroupDTO groupDTOResponse = null;
 
-        groupDTO.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
-        System.out.println("groupDTO: "+groupDTO);
-        GroupDTO groupDTOResponse = groupInfoService.createGroup(groupDTO);
+        if (!StringUtils.hasText(loggedInUserName)){
+            // STORING GROUP FIRST TO GET GROUP ID
+            GroupDTO groupDTO = new GroupDTO();
+            groupDTO.setGroupName(requestDTO.getGroupName());
+            groupDTO.setGroupDescription(requestDTO.getGroupName());
+            groupDTO.setCreatedBy(TaskTrackerConstant.TASK_ADMIN);
+            groupDTO.setModifiedBy(TaskTrackerConstant.TASK_ADMIN);
+            groupDTO.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
+            System.out.println("groupDTO: "+groupDTO);
+            groupDTOResponse = groupInfoService.createGroup(groupDTO);
+        } else{
+            // GET GROUP DETAILS FROM DB FOR THE ADMIN AND USE IT FOR THE NEWLY CREATED USER
+            groupDTOResponse = groupInfoService.getGroupByUserName(loggedInUserName);
+        }
         System.out.println("groupDTOResponse: "+groupDTOResponse);
 
-        System.out.println("requestDTO: "+requestDTO);
         UserInfo userEntity=userMapper.userDTOToUserInfo(requestDTO);
         System.out.println("userEntity: "+userEntity);
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
