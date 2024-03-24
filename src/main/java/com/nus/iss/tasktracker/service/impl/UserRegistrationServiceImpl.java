@@ -76,8 +76,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         }
 
         // Only update userEntity if all validations pass
-        //userEntity = userMapper.mapChangePasswordRequestDTOToUser(userEntity, requestDTO);
-        userEntity = userMapper.mapChangePasswordRequestDTOToUser(requestDTO);
+        userEntity = userMapper.userDTOToUserInfo(requestDTO);
         userEntity.setPassword(newPassword);
         userInfoRepository.save(userEntity);
 
