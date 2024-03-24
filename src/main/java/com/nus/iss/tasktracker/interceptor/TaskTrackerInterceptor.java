@@ -6,13 +6,22 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Enumeration;
 
 @Component
 public class TaskTrackerInterceptor implements HandlerInterceptor{
 
     private final JWTUtil jwtUtil;
+
+    private static final ThreadLocal<String> userNameHolder = new ThreadLocal<>();
+
+    public static String getLoggedInUserName() {
+        return userNameHolder.get();
+    }
 
     @Autowired
     public TaskTrackerInterceptor(JWTUtil jwtUtil) {
@@ -37,13 +46,19 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
 
         // DO TOKEN VALIDATION
         // THROW ERROR IF THE TOKEN IS EMPTY OR THE VALIDATION FAILS
-        if( token == null){
+        if(!StringUtils.hasText(token)){
             System.out.println("TOKEN IS EMPTY");
             // FIXME
             //throw new Exception("No Token");
         } else{
             System.out.println("TOKEN IS "+token);
-            isTokenValid = jwtUtil.validateJWT(token);
+            String subjectValue = jwtUtil.validateJWT(token);
+            if(!StringUtils.hasText(subjectValue)){
+                isTokenValid = false;
+            } else{
+                // Set a value in the thread-local variable
+                userNameHolder.set(subjectValue);
+            }
         }
 
         System.out.println("Token valid: "+isTokenValid);
@@ -67,5 +82,6 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
                                 Exception ex) throws Exception {
         // This method is called after the view is rendered.
         // You can perform cleanup activities here.
+        userNameHolder.remove();
     }
 }

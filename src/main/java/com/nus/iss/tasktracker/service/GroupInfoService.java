@@ -7,4 +7,7 @@ public interface GroupInfoService {
     public GroupDTO getGroupById(int groupId);
 
     public GroupDTO createGroup(GroupDTO groupDTO);
+
+    public GroupDTO getGroupByUserName(String userName);
+
 }
