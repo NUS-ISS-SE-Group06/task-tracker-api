@@ -15,7 +15,8 @@ public class CustomResponseHandler {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<Response> handleRuntimeException(RuntimeException ex) {
-        ex.printStackTrace();
+        System.out.println(ex.getMessage());
+        System.out.println(ex.getLocalizedMessage());
         Response errorResponse = new Response(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),

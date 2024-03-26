@@ -161,7 +161,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         userEntity.setModifiedBy(TaskTrackerConstant.TASK_ADMIN);
         userEntity.setModifiedDate(timestamp);
         userEntity.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
-        userEntity.setPasswordChangeMandatory(TaskTrackerConstant.TASK_PASSWORD_CHANGE_MANDATORY_FALSE);
+        userEntity.setPasswordChangeMandatory(TaskTrackerConstant.TASK_PWD_CHANGE_MANDATORY_FALSE);
         UserDTO output= userMapper.userEntityToUserDTO(userInfoRepository.save(userEntity));
         output.setPassword(null);
         output.setOldPassword(null);
