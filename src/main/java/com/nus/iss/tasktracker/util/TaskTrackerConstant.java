@@ -24,9 +24,9 @@ public class TaskTrackerConstant {
 
     public static final String DELETE_FLAG_FALSE = "FALSE";
 
-    public static final String TASK_PASSWORD_CHANGE_MANDATORY_TRUE = "TRUE";
+    public static final String TASK_PWD_CHANGE_MANDATORY_TRUE = "TRUE";
 
-    public static final String TASK_PASSWORD_CHANGE_MANDATORY_FALSE = "FALSE";
+    public static final String TASK_PWD_CHANGE_MANDATORY_FALSE = "FALSE";
 
     public static final String REGISTRATION_ROLE_ADMIN = "ROLE_ADMIN";
 

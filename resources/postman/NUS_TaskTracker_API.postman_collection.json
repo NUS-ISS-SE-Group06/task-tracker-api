@@ -37,6 +37,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "USER_REGISTRATION",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"normaluser\",\n    \"email\": \"nuser@gmail.com\",\n    \"groupName\": \"\",\n    \"userRole\": \"ROLE_USER\",\n    \"username\": \"normaluser1\",\n    \"password\": \"normaluser1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8688/api/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"signup"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -117,7 +146,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"user1\",\n    \"password\": \"password1\"\n}"
+							"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password1\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8688/api/userinfo/login",
@@ -184,7 +213,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJ1c2VyMSIsImF1dGgiOiJST0xFX1VTRVIiLCJqdGkiOiJlMTE2NDdlYi0zMzE2LTRiMGMtYmVlZC1jNzVmZWNmMTMwODMiLCJpYXQiOjE3MTA5NTM2NDYsImV4cCI6MTcxMDk1NDI0Nn0.xNg0BsWlCNI6bz1BflAEIvpVwf-Id5t9cNDZykSaSNnbkN6Xh4oQbSsLTyi4Nehq_d0RmK4jhRVHn8UvEe7Dqw",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJncnB1c2VyMSIsImF1dGgiOiJST0xFX1VTRVIiLCJqdGkiOiJiY2QwMmM1OC1hNDg1LTQ4ZTktYjVmYy0xMmMwZTU2YTlhZTIiLCJpYXQiOjE3MTEyOTA0NjUsImV4cCI6MTcxMTI5MTA2NX0.YW-6AHvxIK-5ERvvzaSdp4HX26-cf_4ZmGblXJiIYe6I9fWlAK2dMg8AM7QzjZ9GMGmXGfb9S1YFOufU72S7eA",
 						"type": "text"
 					}
 				],
@@ -198,6 +227,32 @@
 					"path": [
 						"api",
 						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "USER_LIST",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJ1c2VyMiIsImF1dGgiOiJST0xFX0FETUlOIiwianRpIjoiNDNjMjNlMGItNWFkMS00MDUyLWE1ODAtNTgwNjczNjcwZjVjIiwiaWF0IjoxNzExMzg2MzE2LCJleHAiOjE3MTEzODY5MTZ9.Xm7I2BpzDF9p4o3tjWkV2uJwXMqyfOyweLICBZo_WIrDEMQKR6AfOSnDHKVvJInmSEA5GFq49x5gjlFhj_1Clg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8688/api/userlist",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8688",
+					"path": [
+						"api",
+						"userlist"
 					]
 				}
 			},

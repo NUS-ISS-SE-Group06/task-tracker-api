@@ -18,9 +18,14 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
     private final JWTUtil jwtUtil;
 
     private static final ThreadLocal<String> userNameHolder = new ThreadLocal<>();
+    private static final ThreadLocal<String> userRoleHolder = new ThreadLocal<>();
 
     public static String getLoggedInUserName() {
         return userNameHolder.get();
+    }
+
+    public static String getLoggedInUserRole() {
+        return userRoleHolder.get();
     }
 
     @Autowired
@@ -52,15 +57,16 @@ public class TaskTrackerInterceptor implements HandlerInterceptor{
             //throw new Exception("No Token");
         } else{
             System.out.println("TOKEN IS "+token);
-            String subjectValue = jwtUtil.validateJWT(token);
-            if(!StringUtils.hasText(subjectValue)){
+            String[] subjectRoleValues = jwtUtil.validateJWT(token);
+            if((subjectRoleValues==null) || (subjectRoleValues.length!=2) ||
+                    (!StringUtils.hasText(subjectRoleValues[0])) || (!StringUtils.hasText(subjectRoleValues[1]))){
                 isTokenValid = false;
             } else{
                 // Set a value in the thread-local variable
-                userNameHolder.set(subjectValue);
+                userNameHolder.set(subjectRoleValues[0]);
+                userRoleHolder.set(subjectRoleValues[1]);
             }
         }
-
         System.out.println("Token valid: "+isTokenValid);
 
         if(!isTokenValid){

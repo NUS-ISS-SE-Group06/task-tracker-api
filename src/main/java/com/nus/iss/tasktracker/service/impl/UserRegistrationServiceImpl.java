@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -159,7 +161,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         userEntity.setModifiedBy(TaskTrackerConstant.TASK_ADMIN);
         userEntity.setModifiedDate(timestamp);
         userEntity.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
-        userEntity.setPasswordChangeMandatory(TaskTrackerConstant.TASK_PASSWORD_CHANGE_MANDATORY_FALSE);
+        userEntity.setPasswordChangeMandatory(TaskTrackerConstant.TASK_PWD_CHANGE_MANDATORY_FALSE);
         UserDTO output= userMapper.userEntityToUserDTO(userInfoRepository.save(userEntity));
         output.setPassword(null);
         output.setOldPassword(null);
@@ -167,7 +169,38 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         output.setAuthToken(null);
 
         return output;
+    }
 
+    @Override
+    public List<UserDTO> getAllUsersInAGroup() {
+        List<UserDTO> userDTOList = new ArrayList<UserDTO>();
+        String userName = TaskTrackerInterceptor.getLoggedInUserName();
+        String userRole = TaskTrackerInterceptor.getLoggedInUserRole();
+        System.out.println("userName: "+userName+"; userRole: "+userRole);
+
+        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
+            throw new RuntimeException("Service Accessed Without Token");
+        }
+
+        if(userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)){
+            UserInfo currentUserInfo = userInfoRepository.findByUsername(userName);
+            if(currentUserInfo!=null){
+                List<UserInfo> userInfoList = userInfoRepository.findAllByGroupId(currentUserInfo.getGroupId());
+                System.out.println(userInfoList);
+
+                for(UserInfo userInfo: userInfoList){
+                    UserDTO output= userMapper.userEntityToUserDTO(userInfo);
+                    output.setPassword(null);
+                    userDTOList.add(output);
+                }
+            } else{
+                throw new RuntimeException("User Info unavailable in DB");
+            }
+        } else{
+            throw new RuntimeException("Service Accessed by Non-Admin");
+        }
+
+        return  userDTOList;
     }
 
 }
