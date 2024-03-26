@@ -260,15 +260,4 @@ class UserRegistrationControllerTest {
         .andExpect(jsonPath("$.[0].userId").value(1));
   }
 
-  @Test
-  void testGetAllUsers_ERROR_RESPONSE() throws  Exception{
-
-    when(userRegistrationService.getAllUsersInAGroup()).thenReturn(userDTOList);
-    mockMvc.perform(get("/userlist")
-            .contentType(MediaType.APPLICATION_JSON)
-        )
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.[0].userId").value(1));
-  }
-
 }
