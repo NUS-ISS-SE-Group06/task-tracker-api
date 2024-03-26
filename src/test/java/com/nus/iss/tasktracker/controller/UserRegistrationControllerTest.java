@@ -1,6 +1,9 @@
 package com.nus.iss.tasktracker.controller;
 
 import com.nus.iss.tasktracker.dto.UserDTO;
+import com.nus.iss.tasktracker.interceptor.TaskTrackerInterceptor;
+import com.nus.iss.tasktracker.model.UserInfo;
+import com.nus.iss.tasktracker.repository.UserInfoRepository;
 import com.nus.iss.tasktracker.service.impl.UserRegistrationServiceImpl;
 import com.nus.iss.tasktracker.util.JWTUtil;
 import org.junit.jupiter.api.Test;
@@ -9,6 +12,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -25,9 +31,17 @@ class UserRegistrationControllerTest {
     private UserRegistrationServiceImpl userRegistrationService;
 
     @MockBean
+    private UserInfoRepository userInfoRepository;
+
+//    @MockBean
+//    private TaskTrackerInterceptor taskTrackerInterceptor;
+
+    @MockBean
     private JWTUtil jwtUtil;
 
-    @Test
+    private JWTUtil jwtUtil2;
+
+  @Test
     void testSignUp_Success() throws  Exception{
 
         String requestBody= """
@@ -67,7 +81,6 @@ class UserRegistrationControllerTest {
                         .content(requestBody)
                 )
                 .andExpect(status().isOk())
-
                 .andExpect(jsonPath("$.body.userId").value(1))
                 .andExpect(jsonPath("$.body.groupId").value(nullValue()))
                 .andExpect(jsonPath("$.body.email").value("User1@test.test"))
@@ -208,5 +221,54 @@ class UserRegistrationControllerTest {
     }
 
 
+  @Test
+  void testGetAllUsers_SUCCESS_RESPONSE() throws  Exception{
+    UserDTO userDTO1 = new UserDTO();
+    userDTO1.setUserId(1);
+    userDTO1.setEmail("User1@test.test");
+    userDTO1.setName("Firstname1 Lastname1");
+    userDTO1.setUsername("user1");
+    userDTO1.setUserRole("ROLE_ADMIN");
+    userDTO1.setGroupId(1);
+
+    UserDTO userDTO2 = new UserDTO();
+    userDTO2.setUserId(2);
+    userDTO2.setEmail("User2@test.test");
+    userDTO2.setName("Firstname2 Lastname2");
+    userDTO2.setUsername("user2");
+    userDTO2.setUserRole("ROLE_ADMIN");
+    userDTO2.setGroupId(1);
+
+    UserDTO userDTO3 = new UserDTO();
+    userDTO3.setUserId(3);
+    userDTO3.setEmail("User3@test.test");
+    userDTO3.setName("Firstname3 Lastname3");
+    userDTO3.setUsername("user3");
+    userDTO3.setUserRole("ROLE_ADMIN");
+    userDTO3.setGroupId(1);
+
+    List<UserDTO> userDTOList = new ArrayList<UserDTO>();
+    userDTOList.add(userDTO1);
+    userDTOList.add(userDTO2);
+    userDTOList.add(userDTO3);
+
+    when(userRegistrationService.getAllUsersInAGroup()).thenReturn(userDTOList);
+    mockMvc.perform(get("/userlist")
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.[0].userId").value(1));
+  }
+
+  @Test
+  void testGetAllUsers_ERROR_RESPONSE() throws  Exception{
+
+    when(userRegistrationService.getAllUsersInAGroup()).thenReturn(userDTOList);
+    mockMvc.perform(get("/userlist")
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.[0].userId").value(1));
+  }
 
 }
