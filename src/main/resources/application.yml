@@ -5,7 +5,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:sqlite:/Users/balajisivaprakasam/Desktop/SiBa/NUS_Projects/task-tracker-api/resources/db/tasktracker.db
+    url: jdbc:sqlite:/Users/brittaalex/Documents/workstation/mtech-worskpace/task-tracker-api/resources/db/tasktracker.db
     driver-class-name: org.sqlite.JDBC
     username:
     password:

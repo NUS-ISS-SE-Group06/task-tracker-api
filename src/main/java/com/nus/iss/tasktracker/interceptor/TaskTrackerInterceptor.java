@@ -16,12 +16,20 @@ import java.util.List;
 public class TaskTrackerInterceptor implements HandlerInterceptor{
 
     private final JWTUtil jwtUtil;
+    private static final ThreadLocal<String> userNameHolder = new ThreadLocal<>();
+    private static final ThreadLocal<String> userRoleHolder = new ThreadLocal<>();
 
     @Autowired
     public TaskTrackerInterceptor(JWTUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 
+    public static String getLoggedInUserName() {
+        return userNameHolder.get();
+    }
+    public static String getLoggedInUserRole() {
+        return userRoleHolder.get();
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
