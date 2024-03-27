@@ -1,8 +1,7 @@
 package com.nus.iss.tasktracker.service.impl;
-
 import com.nus.iss.tasktracker.dto.TaskInfoDTO;
-import com.nus.iss.tasktracker.dto.UserDTO;
 import com.nus.iss.tasktracker.mapper.TaskInfoMapper;
+import com.nus.iss.tasktracker.mapper.TaskMapper;
 import com.nus.iss.tasktracker.model.TaskInfo;
 import com.nus.iss.tasktracker.model.UserInfo;
 import com.nus.iss.tasktracker.repository.TaskInfoRepository;
@@ -13,13 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.nus.iss.tasktracker.interceptor.TaskTrackerInterceptor;
 import org.springframework.util.StringUtils;
-
+import com.nus.iss.tasktracker.dto.LeaderBoardDTO;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Objects;
+import com.nus.iss.tasktracker.model.LeaderBoardQueryInfo;
+import java.util.ArrayList;
 
 @Service
 public class TaskInfoServiceImpl implements TaskInfoService {
@@ -28,11 +29,13 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     private final TaskInfoRepository taskInfoRepository;
 
     private final UserInfoRepository userInfoRepository;
+    private final TaskMapper taskMapper;
 
-    public TaskInfoServiceImpl(TaskInfoMapper taskInfoMapper, TaskInfoRepository taskInfoRepository, UserInfoRepository userInfoRepository) {
+    public TaskInfoServiceImpl(TaskInfoMapper taskInfoMapper, TaskInfoRepository taskInfoRepository, UserInfoRepository userInfoRepository, TaskMapper taskMapper) {
         this.taskInfoMapper = taskInfoMapper;
         this.taskInfoRepository = taskInfoRepository;
         this.userInfoRepository = userInfoRepository;
+        this.taskMapper = taskMapper;
     }
 
     @Override
@@ -86,8 +89,8 @@ public class TaskInfoServiceImpl implements TaskInfoService {
                 throw new RuntimeException("User Info unavailable in DB");
             }
         }
-        taskInfoEntity.setCreatedDate(LocalDateTime.now());
-        taskInfoEntity.setModifiedDate(LocalDateTime.now());
+        taskInfoEntity.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
+        taskInfoEntity.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
 
         //Save and map to dto
         TaskInfoDTO savedTaskInfoDTO= taskInfoMapper.taskInfoToTaskinfoDTO(taskInfoRepository.save(taskInfoEntity));
@@ -96,4 +99,30 @@ public class TaskInfoServiceImpl implements TaskInfoService {
 
         return savedTaskInfoDTO;
     }
+
+    @Override
+    public List<LeaderBoardDTO> findTaskRewardPointsByGroupId(Integer groupId) {
+        List<LeaderBoardQueryInfo> result = new ArrayList<>();
+        List<Object[]> queryResult = taskInfoRepository.findTaskRewardPointsByGroupId(groupId);
+        int rowId=0;
+        for(Object[] row: queryResult) {
+            rowId++;
+
+            // column index : 0 user_id, 1 name, 2 group_id, 3 group_name, 4 task_reward_point
+            LeaderBoardQueryInfo record = new LeaderBoardQueryInfo();
+            record.setId((Integer) rowId);
+            record.setUserId((Integer) row[0]);
+            record.setName((String) row[1]);
+            record.setGroupId((Integer) row[2]);
+            record.setGroupName((String) row[3]);
+            record.setTaskRewardPoint((Integer) row[4]);
+            result.add(record);
+        }
+
+        return taskMapper.leaderBoardQueryInfoListToLeaderBoardDTOList(result);
+    }
 }
+
+
+
+

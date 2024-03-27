@@ -2,9 +2,9 @@ package com.nus.iss.tasktracker.util;
 
 public class TaskTrackerConstant {
 
-    public static final String JWT_SECRET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    public static final String JWT_MAGIC_WORD = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-    public static final int JWT_EXPIRATION_MINS = 10;
+    public static final int JWT_EXPIRATION_MINUTES = 10;
 
     public static final String JWT_ISSUER = "TASK_TRACKER";
 
@@ -31,5 +31,6 @@ public class TaskTrackerConstant {
     public static final String REGISTRATION_ROLE_ADMIN = "ROLE_ADMIN";
 
     public static final String REGISTRATION_ROLE_USER = "ROLE_USER";
+
 
 }

@@ -5,10 +5,16 @@ import lombok.Data;
 @Data
 public class GroupDTO {
 
-    private Long groupId;
+    private Integer groupId;
+
     private String groupName;
+
     private String groupDescription;
-    private String deleteFlag;
+
     private String createdBy;
+
+    private String modifiedBy;
+
+    private String deleteFlag;
 
 }

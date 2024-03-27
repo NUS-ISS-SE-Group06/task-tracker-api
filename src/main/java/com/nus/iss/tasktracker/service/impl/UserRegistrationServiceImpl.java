@@ -2,18 +2,21 @@ package com.nus.iss.tasktracker.service.impl;
 
 import com.nus.iss.tasktracker.dto.GroupDTO;
 import com.nus.iss.tasktracker.dto.UserDTO;
+import com.nus.iss.tasktracker.interceptor.TaskTrackerInterceptor;
 import com.nus.iss.tasktracker.mapper.UserMapper;
-import com.nus.iss.tasktracker.model.GroupInfo;
 import com.nus.iss.tasktracker.model.UserInfo;
-import com.nus.iss.tasktracker.repository.GroupInfoRepository;
 import com.nus.iss.tasktracker.repository.UserInfoRepository;
 import com.nus.iss.tasktracker.service.GroupInfoService;
 import com.nus.iss.tasktracker.service.UserRegistrationService;
+import com.nus.iss.tasktracker.util.TaskTrackerConstant;
+import org.springframework.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -22,19 +25,15 @@ import java.util.Objects;
 public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     private  final UserInfoRepository userInfoRepository;
-    //private final GroupInfoRepository groupInfoRepository;
-
+    private final GroupInfoService groupInfoService;
     private final UserMapper userMapper;
 
-    // FIXME - UNCOMMENT THE BELOW CONSTRUCTOR CODE ONCE userInfoRepository CODE IS WRITTEN
-
-
 @Autowired
-    // FIXME - REMOVE THE BELOW DUMMY CONSTRUCTOR CODE ONCE userInfoRepository CODE IS WRITTEN
-    public UserRegistrationServiceImpl(UserInfoRepository userInfoRepository, UserMapper userMapper, GroupInfoRepository groupInfoRepository) {
+
+    public UserRegistrationServiceImpl(UserInfoRepository userInfoRepository, UserMapper userMapper, GroupInfoService groupInfoService) {
         this.userInfoRepository = userInfoRepository;
+        this.groupInfoService = groupInfoService;
         this.userMapper = userMapper;
-        //this.groupInfoRepository=groupInfoRepository;
     }
 
     @Override
@@ -47,8 +46,8 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         // FIXME - REMOVE THE BELOW DUMMY LINES OF CODE ONCE userInfoRepository CODE IS WRITTEN
         // DUMMY CODE START
         UserInfo userEntity = new UserInfo();
-        userEntity.setUserid(userid);
-       userEntity.setUserid(1);
+        userEntity.setUserId(userid);
+       userEntity.setUserId(1);
        // userEntity.setUserRole("ADMIN");
         // DUMMY CODE END
 
@@ -79,50 +78,128 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         }
 
         // Only update userEntity if all validations pass
-        //userEntity = userMapper.mapChangePasswordRequestDTOToUser(userEntity, requestDTO);
-        userEntity = userMapper.mapChangePasswordRequestDTOToUser(requestDTO);
+        userEntity = userMapper.userDTOToUserInfo(requestDTO);
         userEntity.setPassword(newPassword);
         userInfoRepository.save(userEntity);
 
     }
 
+    // THIS SIGNUP METHOD IS USED FOR BOTH ADMIN REGISTRATION DONE FROM PRE LOGIN AND FOR USER REGISTRATION DONE FROM POST LOGIN BY ADMIN
     @Override
     public UserDTO signUp(UserDTO requestDTO){
 
-        if(Objects.equals(requestDTO.getName(), "")){
-            throw new RuntimeException("Name - Please input value!");
+        String loggedInUserName = TaskTrackerInterceptor.getLoggedInUserName();
+        System.out.println("loggedInUserName: "+loggedInUserName);
+
+        if(!StringUtils.hasText(requestDTO.getName())){
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Name"));
         }
 
-        if(Objects.equals(requestDTO.getEmail(), "")){
-            throw new RuntimeException("Email - Please input value!");
+        if(!StringUtils.hasText(requestDTO.getEmail())){
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Email"));
         }
 
-        if(Objects.equals(requestDTO.getUsername(), "")){
-            throw new RuntimeException("Username - Please input value!");
+        if(!StringUtils.hasText(requestDTO.getUserRole())){
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "User Role"));
         }
 
-        if(Objects.equals(requestDTO.getPassword(), "")){
-            throw new RuntimeException("Password - Please input value!");
+        if(!StringUtils.hasText(requestDTO.getGroupName())){
+            // THROW THE ERROR IF THE GROUP NAME IS EMPTY AND SIGNUP IS HAPPENING FROM PRE-LOGIN
+            if (!StringUtils.hasText(loggedInUserName)){
+                throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Group Name"));
+            }
+        }else {
+            if ( requestDTO.getGroupName().length() < 6 || !requestDTO.getGroupName().matches("^(?! )[0-9A-Za-z](?!.* $)[0-9A-Za-z\\s]{0,18}(?<! )$")) {
+                throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_GROUP_NAME);
+            }
+        }
+
+        if(!StringUtils.hasText(requestDTO.getUsername())){
+                throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Username"));
+        }
+
+        if(!StringUtils.hasText(requestDTO.getPassword())){
+            throw new RuntimeException(String.format(TaskTrackerConstant.SIGNUP_INVALID_INPUT, "Password"));
+        } else {
+            if (requestDTO.getPassword().length() < 8 || !requestDTO.getPassword().matches(".*[a-zA-Z].*\\d.*")) {
+                throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_INPUT_PASSWORD);
+            }
         }
 
         boolean isExists = userInfoRepository.existsByUsername(requestDTO.getUsername());
         if(isExists){
-            throw new RuntimeException("Username not available!");
+            throw new RuntimeException(TaskTrackerConstant.SIGNUP_INVALID_INPUT_USERNAME_UNAVAILABLE);
         }
 
-        UserInfo userEntity=userMapper.mapChangePasswordRequestDTOToUser(requestDTO);
-        userEntity.setCreatedDate(new Timestamp(System.currentTimeMillis()));
-        userEntity.setDeleteFlag("FALSE");
-        userEntity.setPasswordChangeMandatory("FALSE");
+        System.out.println("requestDTO: "+requestDTO);
+        GroupDTO groupDTOResponse = null;
+
+        if (!StringUtils.hasText(loggedInUserName)){
+            // STORING GROUP FIRST TO GET GROUP ID
+            GroupDTO groupDTO = new GroupDTO();
+            groupDTO.setGroupName(requestDTO.getGroupName());
+            groupDTO.setGroupDescription(requestDTO.getGroupName());
+            groupDTO.setCreatedBy(TaskTrackerConstant.TASK_ADMIN);
+            groupDTO.setModifiedBy(TaskTrackerConstant.TASK_ADMIN);
+            groupDTO.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
+            System.out.println("groupDTO: "+groupDTO);
+            groupDTOResponse = groupInfoService.createGroup(groupDTO);
+        } else{
+            // GET GROUP DETAILS FROM DB FOR THE ADMIN AND USE IT FOR THE NEWLY CREATED USER
+            groupDTOResponse = groupInfoService.getGroupByUserName(loggedInUserName);
+        }
+        System.out.println("groupDTOResponse: "+groupDTOResponse);
+
+        UserInfo userEntity=userMapper.userDTOToUserInfo(requestDTO);
+        System.out.println("userEntity: "+userEntity);
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+        userEntity.setGroupId(groupDTOResponse.getGroupId());
+        userEntity.setCreatedBy(TaskTrackerConstant.TASK_ADMIN);
+        userEntity.setCreatedDate(timestamp);
+        userEntity.setModifiedBy(TaskTrackerConstant.TASK_ADMIN);
+        userEntity.setModifiedDate(timestamp);
+        userEntity.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
+        userEntity.setPasswordChangeMandatory(TaskTrackerConstant.TASK_PWD_CHANGE_MANDATORY_FALSE);
         UserDTO output= userMapper.userEntityToUserDTO(userInfoRepository.save(userEntity));
         output.setPassword(null);
         output.setOldPassword(null);
         output.setNewPassword(null);
         output.setAuthToken(null);
-        output.setCreatedBy(null);
 
         return output;
+    }
 
+    @Override
+    public List<UserDTO> getAllUsersInAGroup() {
+        List<UserDTO> userDTOList = new ArrayList<UserDTO>();
+        String userName = TaskTrackerInterceptor.getLoggedInUserName();
+        String userRole = TaskTrackerInterceptor.getLoggedInUserRole();
+        System.out.println("userName: "+userName+"; userRole: "+userRole);
+
+        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
+            throw new RuntimeException("Service Accessed Without Token");
+        }
+
+        if(userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)){
+            UserInfo currentUserInfo = userInfoRepository.findByUsername(userName);
+            if(currentUserInfo!=null){
+                List<UserInfo> userInfoList = userInfoRepository.findAllByGroupId(currentUserInfo.getGroupId());
+                System.out.println(userInfoList);
+
+                for(UserInfo userInfo: userInfoList){
+                    UserDTO output= userMapper.userEntityToUserDTO(userInfo);
+                    output.setPassword(null);
+                    userDTOList.add(output);
+                }
+            } else{
+                throw new RuntimeException("User Info unavailable in DB");
+            }
+        } else{
+            throw new RuntimeException("Service Accessed by Non-Admin");
+        }
+
+        return  userDTOList;
     }
 
 }

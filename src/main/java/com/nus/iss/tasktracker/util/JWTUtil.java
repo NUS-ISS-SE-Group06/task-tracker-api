@@ -16,10 +16,10 @@ import java.util.UUID;
 @Component
 public class JWTUtil {
 
-    @Value("${task-tracker.jwt.secret:" + TaskTrackerConstant.JWT_SECRET + "}")
+    @Value("${task-tracker.jwt.secret:" + TaskTrackerConstant.JWT_MAGIC_WORD + "}")
     private String secret;
 
-    @Value("${task-tracker.jwt.expirationTimeInMins:" + TaskTrackerConstant.JWT_EXPIRATION_MINS + "}")
+    @Value("${task-tracker.jwt.expirationTimeInMins:" + TaskTrackerConstant.JWT_EXPIRATION_MINUTES + "}")
     private int jwtTokenExpiryInMins;
 
     public void createJWT(UserDTO userDTO)  {
@@ -51,8 +51,8 @@ public class JWTUtil {
         userDTO.setAuthToken(jwtToken);
     }
 
-    public boolean validateJWT(String jwtString){
-        boolean isTokenValid = true;
+    public String[] validateJWT(String jwtString){
+        String[] subjectRoleValues = new String[2];
 
         //FIXME - REPLACE DEPRECATED APIs
         Key hmacKey = new SecretKeySpec(Base64.getDecoder().decode(secret),
@@ -64,17 +64,20 @@ public class JWTUtil {
                     .setSigningKey(hmacKey)
                     .build()
                     .parseClaimsJws(jwtString);
-            System.out.println("jwt: "+jwt);
-            System.out.println("jwt: "+jwt.getPayload().getExpiration());
+            System.out.println("jwt token: "+jwt);
+            System.out.println("jwt token expiration: "+jwt.getPayload().getExpiration());
+            subjectRoleValues[0] = jwt.getPayload().getSubject();
+            System.out.println("jwt token subject / username: "+subjectRoleValues[0]);
+            subjectRoleValues[1] = (String)jwt.getPayload().get("auth");
+            System.out.println("jwt token auth: "+subjectRoleValues[1]);
+
         } catch(ExpiredJwtException expiredJwtException){
             System.out.println("Auth Token Expired: "+expiredJwtException.getMessage());
-            isTokenValid = false;
         } catch(io.jsonwebtoken.security.SignatureException signatureException){
             System.out.println("Signature validation failed: "+signatureException.getMessage());
-            isTokenValid = false;
         }
 
-        return isTokenValid;
+        return subjectRoleValues;
     }
 
 }

@@ -6,10 +6,12 @@ import com.nus.iss.tasktracker.service.UserRegistrationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.nus.iss.tasktracker.util.CustomResponseHandler;
+
+import java.util.List;
+
 @RestController
 @Slf4j
 public class UserRegistrationController {
@@ -60,10 +62,13 @@ public class UserRegistrationController {
         } else {
             return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
         }
-
-
     }
 
+    @GetMapping("userlist")
+    public List<UserDTO> getAllUsersForGroup(){
+        log.info("userlist endpoint called");
+        return userRegistrationService.getAllUsersInAGroup();
+    }
 
-
+    // FIXME - GENERIC NOTE TO REPLACE ALL System.out.println WITH log STATEMENTS
 }

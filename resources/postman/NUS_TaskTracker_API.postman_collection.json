@@ -7,80 +7,204 @@
 	},
 	"item": [
 		{
-			"name": "ChangePassword",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"britta\",\n    \"oldPassword\": \"admin12345\",\n    \"newPassword\": \"admin123456\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "USER_REGISTRATION",
+			"item": [
+				{
+					"name": "ADMIN_REGISTRATION",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Name1\",\n    \"email\": \"name1@gmail.com\",\n    \"groupName\": \"Name1 Group\",\n    \"username\": \"Name9\",\n    \"password\": \"Name2024\",\n    \"userRole\": \"ROLE_ADMIN\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8688/api/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"signup"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8688/api/change-password",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8688",
-					"path": [
-						"api",
-						"change-password"
-					]
+				{
+					"name": "USER_REGISTRATION",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"normaluser\",\n    \"email\": \"nuser@gmail.com\",\n    \"groupName\": \"\",\n    \"userRole\": \"ROLE_USER\",\n    \"username\": \"normaluser1\",\n    \"password\": \"normaluser1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8688/api/signup",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"signup"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "login",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+			"name": "GROUP",
+			"item": [
+				{
+					"name": "CREATE_GROUP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupName\": \"Group Test\",\n    \"groupDescription\": \"Description for Group Test\",\n    \"createdBy\": \"SiBa\",\n    \"modifiedBy\": \"SiBa\",\n    \"deleteFlag\": \"FALSE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8688/api/group-info/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"group-info",
+								"create"
+							]
+						}
 					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\": \"user1\",\n    \"password\": \"password1\"\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8688/api/userinfo/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8688",
-					"path": [
-						"api",
-						"userinfo",
-						"login"
-					]
+				{
+					"name": "GET_GROUP_INFO",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8688/api/group-info/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"group-info",
+								"6"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "LOGIN",
+			"item": [
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8688/api/userinfo/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"userinfo",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CHANGE_PASSWORD",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user1\",\n    \"oldPassword\": \"password1\",\n    \"newPassword\": \"password2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8688/api/change-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "ZZ_VALIDATE_TOKEN",
@@ -89,7 +213,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJ1c2VyMSIsImF1dGgiOiJST0xFX1VTRVIiLCJqdGkiOiJlMTE2NDdlYi0zMzE2LTRiMGMtYmVlZC1jNzVmZWNmMTMwODMiLCJpYXQiOjE3MTA5NTM2NDYsImV4cCI6MTcxMDk1NDI0Nn0.xNg0BsWlCNI6bz1BflAEIvpVwf-Id5t9cNDZykSaSNnbkN6Xh4oQbSsLTyi4Nehq_d0RmK4jhRVHn8UvEe7Dqw",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJncnB1c2VyMSIsImF1dGgiOiJST0xFX1VTRVIiLCJqdGkiOiJiY2QwMmM1OC1hNDg1LTQ4ZTktYjVmYy0xMmMwZTU2YTlhZTIiLCJpYXQiOjE3MTEyOTA0NjUsImV4cCI6MTcxMTI5MTA2NX0.YW-6AHvxIK-5ERvvzaSdp4HX26-cf_4ZmGblXJiIYe6I9fWlAK2dMg8AM7QzjZ9GMGmXGfb9S1YFOufU72S7eA",
 						"type": "text"
 					}
 				],
@@ -109,42 +233,18 @@
 			"response": []
 		},
 		{
-			"name": "GetGroupInfo",
+			"name": "USER_LIST",
 			"request": {
 				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8688/api/group-info/6",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8688",
-					"path": [
-						"api",
-						"group-info",
-						"6"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "CreateGroup",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"groupName\": \"Group Test\",\n    \"groupDescription\": \"Description for Group Test\",\n    \"createdBy\": \"SiBa\",\n    \"deleteFlag\": \"FALSE\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJ1c2VyMiIsImF1dGgiOiJST0xFX0FETUlOIiwianRpIjoiNDNjMjNlMGItNWFkMS00MDUyLWE1ODAtNTgwNjczNjcwZjVjIiwiaWF0IjoxNzExMzg2MzE2LCJleHAiOjE3MTEzODY5MTZ9.Xm7I2BpzDF9p4o3tjWkV2uJwXMqyfOyweLICBZo_WIrDEMQKR6AfOSnDHKVvJInmSEA5GFq49x5gjlFhj_1Clg",
+						"type": "text"
 					}
-				},
+				],
 				"url": {
-					"raw": "http://localhost:8688/api/group-info/create",
+					"raw": "http://localhost:8688/api/userlist",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -152,8 +252,7 @@
 					"port": "8688",
 					"path": [
 						"api",
-						"group-info",
-						"create"
+						"userlist"
 					]
 				}
 			},

@@ -7,32 +7,63 @@ import lombok.Setter;
 @Entity
 public class GroupInfo {
 
+    public GroupInfo(){
+        //Database - Default Value
+        this.deleteFlag="FALSE";
+    }
 
     @Getter
     @Setter
     @Id
-    @Column(name = "groupid")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long groupId;
+    private Integer groupId;
 
     @Getter
     @Setter
-    @Column(name = "groupname")
     private String groupName;
 
     @Getter
     @Setter
-    @Column(name = "groupdescription")
     private  String groupDescription;
 
     @Getter
     @Setter
-    @Column(name = "createdby")
     private  String createdBy;
 
     @Getter
     @Setter
-    @Column(name = "deleteflag")
+    private  String createdDate;
+
+    @Getter
+    @Setter
+    private  String modifiedBy;
+
+    @Getter
+    @Setter
+    private  String modifiedDate;
+
+    @Getter
+    @Setter
     private String deleteFlag;
+
+
+    //Transient Field - ForeignKey Description
+
+    @Override
+    public String toString() {
+        return "GroupInfo{" +
+                "group_id=" + ((groupId != null) ? groupId : "") +
+                ", group_name=" + ((groupName != null) ? groupName : "null") +
+                ", group_description=" + ((groupDescription != null) ? groupDescription : "null") +
+                ", created_by=" + ((createdBy != null) ? createdBy : "null")  +
+                ", created_date=" + ((createdDate != null) ? createdDate : "null")  +
+                ", modified_by=" + ((modifiedBy != null) ? modifiedBy : "null")  +
+                ", modified_date=" + ((modifiedDate != null) ? modifiedDate : "null")  +
+                ", delete_flag=" + ((deleteFlag != null) ? deleteFlag : "null")  +
+
+
+                '}';
+    }
+
 
 }

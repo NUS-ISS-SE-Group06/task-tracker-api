@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.sql.Timestamp;
 
 @Setter
 @Getter
@@ -12,49 +13,103 @@ import lombok.Setter;
 @Table(name = "task_info")
 public class TaskInfo {
 
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "task_id")
-    private int taskId;
+    private Integer taskId;
 
-    @Column(name = "task_name")
+    @Getter
+    @Setter
     private String taskName;
 
-    @Column(name = "task_description")
+    @Getter
+    @Setter
     private String taskDescription;
 
-    @Column(name = "task_priority")
+    @Getter
+    @Setter
     private String taskPriority;
 
-    @Column(name = "task_category_id")
-    private int taskCategoryId;
+    @Getter
+    @Setter
+    private Integer taskCategoryId;
 
-    @Column(name = "task_due_date")
-    private LocalDateTime taskDueDate;
+    @Getter
+    @Setter
+    private  Timestamp TaskDueDate;
 
-    @Column(name = "task_assignee")
-    private int taskAssignee;
+    @Getter
+    @Setter
+    private  Integer taskAssignee;
 
-    @Column(name = "task_reward_points")
-    private int taskRewardPoints;
+    @Getter
+    @Setter
+    private  Integer taskRewardPoint;
 
-    @Column(name = "task_status")
-    private String taskStatus;
+    @Getter
+    @Setter
+    private  String taskStatus;
 
-    @Column(name = "created_by")
-    private String createdBy;
+    @Getter
+    @Setter
+    private  String createdBy;
 
-    @Column(name = "created_date")
-    private LocalDateTime createdDate;
+    @Getter
+    @Setter
+    private Timestamp createdDate;
 
-    @Column(name = "modified_by")
-    private String modifiedBy;
+    @Getter
+    @Setter
+    private  String modifiedBy;
 
-    @Column(name = "modified_date")
-    private LocalDateTime modifiedDate;
+    @Getter
+    @Setter
+    private  Timestamp modifiedDate;
 
-    @Column(name = "delete_flag")
+    @Getter
+    @Setter
     private String deleteFlag;
 
-    // Constructors, getters, setters, etc. can be added as needed
+    @Getter
+    @Setter
+    @Transient
+    private String taskCategoryName;
+
+    @Getter
+    @Setter
+    @Transient
+    private String taskAssigneeName;
+
+
+    @Override
+    public String toString() {
+        return "TaskInfo{" +
+                "task_id=" + ((taskId  != null ) ? taskId : "") +
+                ", task_name=" + ((taskName != null) ? taskName : "null") +
+                ", task_description=" + ((taskDescription != null) ? taskDescription : "null") +
+                ", task_priority=" + ((taskPriority != null) ? taskPriority : "null") +
+                ", task_category_id=" + ((taskCategoryId != null) ? taskCategoryId : "") +
+                ", task_due_date=" + ((getTaskDueDate() != null) ? getTaskDueDate() : "null") +
+                ", task_assignee=" + ((taskAssignee != null) ? taskAssignee : "null") +
+                ", task_reward_point=" + ((taskRewardPoint != null) ? taskRewardPoint : "null") +
+                ", task_status=" + ((taskStatus != null) ? taskStatus : "null") +
+                ", created_by=" + ((createdBy != null) ? createdBy : "null")  +
+                ", created_date=" + ((createdDate != null) ? createdDate : "null")  +
+                ", modified_by=" + ((modifiedBy != null) ? modifiedBy : "null")  +
+                ", modified_date=" + ((modifiedDate != null) ? modifiedDate : "null")  +
+                ", delete_flag=" + ((deleteFlag != null) ? deleteFlag : "null")  +
+
+                //Transient Field - ForeignKey Description
+                ", taskCategoryName=" + ((taskCategoryName != null) ? taskCategoryName : "null")  +
+                ", taskAssigneeName=" + ((taskAssigneeName != null) ? taskAssigneeName : "null")  +
+
+
+                '}';
+    }
+
+
 }
+
+
+
