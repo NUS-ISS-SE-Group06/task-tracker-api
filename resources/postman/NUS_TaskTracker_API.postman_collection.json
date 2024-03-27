@@ -146,7 +146,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"user2\",\n    \"password\": \"password1\"\n}"
+							"raw": "{\n    \"username\": \"user1\",\n    \"password\": \"password1\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8688/api/userinfo/login",
@@ -199,6 +199,90 @@
 							"path": [
 								"api",
 								"change-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "COMMENT",
+			"item": [
+				{
+					"name": "CREATE_COMMENT",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJUQVNLX1RSQUNLRVIiLCJzdWIiOiJ1c2VyMSIsImF1dGgiOiJUQVNLX0FETUlOIiwianRpIjoiNTY0NzE2ZTItZTEzOC00ZjEyLTk4NzMtMWJmNjU5YjI1MjViIiwiaWF0IjoxNzExNDY4Nzk5LCJleHAiOjE3MTE0NjkzOTl9.kZ91AtyDs2hWY_N3A7_XcCck3gs6A4vVU72G1v-HAWFTiWF-I6ZHE5cazJ21JSStV4SErTmp3luc_ZiQKzOxWA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"taskId\": 1,\n    \"taskComment\": \"Testing Task Comment 1 3 5 7 9 0 , & $ . \"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8688/api/comment-info/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"comment-info",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_COMMENT_BY_ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8688/api/comment-info/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"comment-info",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_COMMENTS_FOR_TASK",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8688/api/comment-info/comment-list/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8688",
+							"path": [
+								"api",
+								"comment-info",
+								"comment-list",
+								"1"
 							]
 						}
 					},

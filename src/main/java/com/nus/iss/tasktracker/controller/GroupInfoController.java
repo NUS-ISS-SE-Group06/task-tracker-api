@@ -25,7 +25,7 @@ public class GroupInfoController {
 
 
     @GetMapping("/{id}")
-    @CrossOrigin(origins = "http://localhost:3005")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Response> getGroupById(@PathVariable int id) throws RuntimeException{
         log.info("Group endpoint called with id {}", id);
         Object responseBody=null;
@@ -45,7 +45,7 @@ public class GroupInfoController {
     }
 
     @PostMapping("/create")
-    @CrossOrigin(origins = "http://localhost:3005")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Response> createGroup(@RequestBody GroupDTO requestDTO) throws RuntimeException {
         log.info("requestDTO: "+requestDTO);
         log.info("requestDTO updated: "+requestDTO);
