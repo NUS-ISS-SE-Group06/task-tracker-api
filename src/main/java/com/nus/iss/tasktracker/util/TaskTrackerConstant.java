@@ -32,5 +32,8 @@ public class TaskTrackerConstant {
 
     public static final String REGISTRATION_ROLE_USER = "ROLE_USER";
 
+    public static final String TASK_COMMENT_REGEX = "^[a-zA-Z0-9, @#$&. ]+$";
+
+    public static final String TASK_COMMENT_INVALID_INPUT = "Invalid Task Comment Input";
 
 }
