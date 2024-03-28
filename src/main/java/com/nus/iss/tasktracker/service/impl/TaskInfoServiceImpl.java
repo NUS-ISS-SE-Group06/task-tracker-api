@@ -57,17 +57,21 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             throw new RuntimeException("DueDate - Please input value!");
         }
         //validate the date /time format
+        // Convert Timestamp to LocalDateTime
+        LocalDateTime dueDate = requestDTO.getTaskDueDate().toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String dueDateString = requestDTO.getTaskDueDate().format(formatter);
+        String dueDateString = dueDate.format(formatter);
         try {
-            LocalDateTime dueDate = LocalDateTime.parse(dueDateString, formatter);
+            // Parse the formatted date string
+            LocalDateTime parsedDueDate = LocalDateTime.parse(dueDateString, formatter);
         } catch (DateTimeParseException e) {
             throw new RuntimeException("DueDate - Invalid date format!");
         }
+
         // Ensure the date is not in the past
         LocalDateTime now = LocalDateTime.now();
 
-        if (requestDTO.getTaskDueDate().isBefore(now)) {
+        if (dueDate.isBefore(now)) {
             throw new RuntimeException("DueDate - Due date cannot be in the past!");
         }
         // Create a new TaskInfoDTO object

@@ -5,6 +5,7 @@ import com.nus.iss.tasktracker.mapper.UserMapper;
 import com.nus.iss.tasktracker.model.UserInfo;
 import com.nus.iss.tasktracker.repository.UserInfoRepository;
 import com.nus.iss.tasktracker.service.UserInfoService;
+import com.nus.iss.tasktracker.util.TaskTrackerConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public UserDTO UserLogin(UserDTO requestDTO){
-        UserInfo userEntity = userInfoRepository.findByUsernameAndPasswordAndDeleteFlag (requestDTO.getUsername(),requestDTO.getPassword(),"FALSE");
 
+        UserInfo userEntity = userInfoRepository.findByUsernameAndPasswordAndDeleteFlag (requestDTO.getUsername(),requestDTO.getPassword(), TaskTrackerConstant.DELETE_FLAG_FALSE);
+        System.out.println(userEntity);
         if (userEntity != null) {
             userEntity.setPassword("");
         }
