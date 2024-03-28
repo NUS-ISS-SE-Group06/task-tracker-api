@@ -130,16 +130,37 @@ public class TaskInfoServiceImpl implements TaskInfoService {
     @Override
     @Transactional
     public TaskInfoDTO deleteTask(int id){
+        //check for the jwt
+        String userName = TaskTrackerInterceptor.getLoggedInUserName();
+        String userRole = TaskTrackerInterceptor.getLoggedInUserRole();
+
+        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
+            throw new RuntimeException("Service Accessed Without Token");
+        }
+
         //retrieve the info
         Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(id);
         if (optionalTaskInfo.isPresent()) {
             //check if the id exists
-            TaskInfo taskInfo = optionalTaskInfo.get();
+            TaskInfo taskInfoEntity = optionalTaskInfo.get();
+            //check if the use is admin
+            if(userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)) {
+                UserInfo currentUserInfo = userInfoRepository.findByUsername(userName);
+                if (currentUserInfo != null) {
+                    taskInfoEntity.setCreatedBy(currentUserInfo.getCreatedBy());
+                    taskInfoEntity.setModifiedBy(currentUserInfo.getCreatedBy());
+                } else {
+                    throw new RuntimeException("User Info unavailable in DB");
+                }
+            }
+            //set create/modified dates
+            taskInfoEntity.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
+            taskInfoEntity.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
             //set delete flag
-            taskInfo.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_TRUE);
+            taskInfoEntity.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_TRUE);
             //save the info
-            taskInfoRepository.save(taskInfo);
-            return taskInfoMapper.taskInfoToTaskinfoDTO(taskInfo);
+            taskInfoRepository.save(taskInfoEntity);
+            return taskInfoMapper.taskInfoToTaskinfoDTO(taskInfoEntity);
         }
         else{
             // If the task does not exist, throw an exception or handle the error as needed
