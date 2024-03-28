@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import com.nus.iss.tasktracker.model.LeaderBoardQueryInfo;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class TaskInfoServiceImpl implements TaskInfoService {
@@ -78,11 +79,14 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         TaskInfo taskInfoEntity = taskInfoMapper.taskInfoToEntity(requestDTO);
         //Set default value for delete flag
         taskInfoEntity.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
+        //get the values from the jwt token for created by/modified by
         String userName = TaskTrackerInterceptor.getLoggedInUserName();
         String userRole = TaskTrackerInterceptor.getLoggedInUserRole();
-        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
-            throw new RuntimeException("Service Accessed Without Token");
-        }
+//        String userRole = "ROLE_ADMIN";
+//        String userName = "user1";
+//        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
+//            throw new RuntimeException("Service Accessed Without Token");
+//        }
 
         if(userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)) {
             UserInfo currentUserInfo = userInfoRepository.findByUsername(userName);
@@ -95,7 +99,6 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         }
         taskInfoEntity.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         taskInfoEntity.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
-
         //Save and map to dto
         TaskInfoDTO savedTaskInfoDTO= taskInfoMapper.taskInfoToTaskinfoDTO(taskInfoRepository.save(taskInfoEntity));
 
@@ -124,6 +127,26 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         }
 
         return taskMapper.leaderBoardQueryInfoListToLeaderBoardDTOList(result);
+    }
+    @Override
+    @Transactional
+    public TaskInfoDTO deleteTask(int id){
+        //retrieve the info
+        Optional<TaskInfo> optionalTaskInfo = taskInfoRepository.findById(id);
+        if (optionalTaskInfo.isPresent()) {
+            //check if the id exists
+            TaskInfo taskInfo = optionalTaskInfo.get();
+            //set delete flag
+            taskInfo.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_TRUE);
+            //save the info
+            taskInfoRepository.save(taskInfo);
+            return taskInfoMapper.taskInfoToTaskinfoDTO(taskInfo);
+        }
+        else{
+            // If the task does not exist, throw an exception or handle the error as needed
+            throw new RuntimeException("Task with ID " + id + " not found");
+        }
+
     }
 }
 

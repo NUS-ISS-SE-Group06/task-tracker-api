@@ -41,4 +41,25 @@ public class TaskInfoController {
         }
 
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Response> deleteTask(@PathVariable int id){
+
+        TaskInfoDTO taskInfoDTO =null;
+        Object responseBody=null;
+        HttpStatus status = HttpStatus.OK;
+        String successOrFailMessage="";
+        try {
+            taskInfoDTO=taskInfoService.deleteTask(id);
+        } catch(Exception e) {
+            successOrFailMessage = e.getMessage();
+        }
+        if (taskInfoDTO !=  null){
+            responseBody = taskInfoDTO;
+            successOrFailMessage = "Task Deleted Successfully.";
+            return CustomResponseHandler.handleSuccessResponse(responseBody, status, successOrFailMessage);
+        } else {
+            return CustomResponseHandler.handleFailResponse(responseBody, status, successOrFailMessage);
+        }
+    }
 }

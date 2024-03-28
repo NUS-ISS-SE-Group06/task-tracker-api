@@ -16,7 +16,7 @@ public class TaskInfoDTO {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private Timestamp taskDueDate;
     private int taskAssignee;
-    private int taskRewardPints;
+    private int taskRewardPoint;
     private String taskStatus;
 
 

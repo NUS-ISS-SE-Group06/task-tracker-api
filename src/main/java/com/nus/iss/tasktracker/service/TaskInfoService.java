@@ -10,4 +10,5 @@ public interface TaskInfoService {
     TaskInfoDTO createTask(TaskInfoDTO requestDTO);
     public List<LeaderBoardDTO> findTaskRewardPointsByGroupId(Integer groupId);
 
+    TaskInfoDTO deleteTask(int id);
 }
