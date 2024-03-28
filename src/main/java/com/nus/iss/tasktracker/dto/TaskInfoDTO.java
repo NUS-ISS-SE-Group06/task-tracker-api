@@ -13,7 +13,7 @@ public class TaskInfoDTO {
     private String taskPriority;
     private int taskCategoryId;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp taskDueDate;
     private int taskAssignee;
     private int taskRewardPoint;
@@ -21,11 +21,29 @@ public class TaskInfoDTO {
 
 
     private String createdBy;
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createdDate;
     private String modifiedBy;
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp modifiedDate;
     private String deleteFlag;
+
+    // Add a constructor matching the fields
+    public TaskInfoDTO(int taskId, String taskName, String taskDescription, String taskPriority, int taskCategoryId, Timestamp taskDueDate, int taskAssignee, int taskRewardPoint, String taskStatus, String createdBy, Timestamp createdDate, String modifiedBy, Timestamp modifiedDate, String deleteFlag) {
+        this.taskId = taskId;
+        this.taskName = taskName;
+        this.taskDescription = taskDescription;
+        this.taskPriority = taskPriority;
+        this.taskCategoryId = taskCategoryId;
+        this.taskDueDate = taskDueDate;
+        this.taskAssignee = taskAssignee;
+        this.taskRewardPoint = taskRewardPoint;
+        this.taskStatus = taskStatus;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.modifiedBy = modifiedBy;
+        this.modifiedDate = modifiedDate;
+        this.deleteFlag = deleteFlag;
+    }
 
 }

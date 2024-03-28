@@ -41,53 +41,54 @@ public class TaskInfoServiceImpl implements TaskInfoService {
 
     @Override
     @Transactional
-    public TaskInfoDTO createTask(TaskInfoDTO requestDTO){
-
-        if(Objects.equals(requestDTO.getTaskName(), "")){
+    public TaskInfoDTO createTask(TaskInfoDTO requestDTO) {
+        // Check if taskName is empty
+        if (StringUtils.isEmpty(requestDTO.getTaskName())) {
             throw new RuntimeException("Name - Please input value!");
         }
 
-        if(Objects.equals(requestDTO.getTaskDescription(), "")){
+        // Check if taskDescription is empty
+        if (StringUtils.isEmpty(requestDTO.getTaskDescription())) {
             throw new RuntimeException("Description - Please input value!");
         }
 
-        if(requestDTO.getTaskAssignee() == 0){
+        // Check if taskAssignee is 0
+        if (requestDTO.getTaskAssignee() == 0) {
             throw new RuntimeException("Assignee - Please input value!");
         }
-        if(requestDTO.getTaskDueDate() == null){
+
+        // Check if taskDueDate is null
+        if (requestDTO.getTaskDueDate() == null) {
             throw new RuntimeException("DueDate - Please input value!");
         }
-        //validate the date /time format
-        // Convert Timestamp to LocalDateTime
-        LocalDateTime dueDate = requestDTO.getTaskDueDate().toLocalDateTime();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String dueDateString = dueDate.format(formatter);
-        try {
-            // Parse the formatted date string
-            LocalDateTime parsedDueDate = LocalDateTime.parse(dueDateString, formatter);
-        } catch (DateTimeParseException e) {
-            throw new RuntimeException("DueDate - Invalid date format!");
-        }
+
+        // Convert LocalDateTime to Timestamp
+
+        Timestamp dueDateTimestamp = taskInfoMapper.toTimestamp(requestDTO.getTaskDueDate().toLocalDateTime());
+
 
         // Ensure the date is not in the past
         LocalDateTime now = LocalDateTime.now();
-
-        if (dueDate.isBefore(now)) {
+        if (requestDTO.getTaskDueDate().toLocalDateTime().isBefore(now)) {
             throw new RuntimeException("DueDate - Due date cannot be in the past!");
         }
+
         // Create a new TaskInfoDTO object
         TaskInfo taskInfoEntity = taskInfoMapper.taskInfoToEntity(requestDTO);
-        //Set default value for delete flag
+
+        taskInfoEntity.setTaskDueDate(dueDateTimestamp);
+        // Set default value for delete flag
         taskInfoEntity.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
-        //get the values from the jwt token for created by/modified by
+
+        // Get the values from the jwt token for created by/modified by
         String userName = TaskTrackerInterceptor.getLoggedInUserName();
         String userRole = TaskTrackerInterceptor.getLoggedInUserRole();
 
-        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
+        if (!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)) {
             throw new RuntimeException("Service Accessed Without Token");
         }
 
-        if(userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)) {
+        if (userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)) {
             UserInfo currentUserInfo = userInfoRepository.findByUsername(userName);
             if (currentUserInfo != null) {
                 taskInfoEntity.setCreatedBy(currentUserInfo.getCreatedBy());
@@ -96,15 +97,101 @@ public class TaskInfoServiceImpl implements TaskInfoService {
                 throw new RuntimeException("User Info unavailable in DB");
             }
         }
+
+        // Set createdDate and modifiedDate
         taskInfoEntity.setCreatedDate(Timestamp.valueOf(LocalDateTime.now()));
         taskInfoEntity.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
-        //Save and map to dto
-        TaskInfoDTO savedTaskInfoDTO= taskInfoMapper.taskInfoToTaskinfoDTO(taskInfoRepository.save(taskInfoEntity));
 
-
+        // Save and map to dto
+        TaskInfoDTO savedTaskInfoDTO = taskInfoMapper.taskInfoToTaskinfoDTO(taskInfoRepository.save(taskInfoEntity));
 
         return savedTaskInfoDTO;
     }
+public TaskInfoDTO updateTask(int taskId,TaskInfoDTO requestDTO){
+
+        //check if taskId is valid
+     if(taskId <= 0){
+         throw new RuntimeException("TaskId invalid!");
+     }
+    // Check if taskName is empty
+    if (StringUtils.isEmpty(requestDTO.getTaskName())) {
+        throw new RuntimeException("Name - Please input value!");
+    }
+
+    // Check if taskDescription is empty
+    if (StringUtils.isEmpty(requestDTO.getTaskDescription())) {
+        throw new RuntimeException("Description - Please input value!");
+    }
+
+    // Check if taskAssignee is 0
+    if (requestDTO.getTaskAssignee() == 0) {
+        throw new RuntimeException("Assignee - Please input value!");
+    }
+
+    // Check if taskDueDate is null
+    if (requestDTO.getTaskDueDate() == null) {
+        throw new RuntimeException("DueDate - Please input value!");
+    }
+
+    // Convert LocalDateTime to Timestamp
+
+    Timestamp dueDateTimestamp = taskInfoMapper.toTimestamp(requestDTO.getTaskDueDate().toLocalDateTime());
+
+
+    // Ensure the date is not in the past
+    LocalDateTime now = LocalDateTime.now();
+    if (requestDTO.getTaskDueDate().toLocalDateTime().isBefore(now)) {
+        throw new RuntimeException("DueDate - Due date cannot be in the past!");
+    }
+    Optional<TaskInfo> optionalTaskInfo  = taskInfoRepository.findById(taskId);
+    TaskInfo taskInfoEntity = optionalTaskInfo.get();
+    if (taskInfoEntity != null) {
+        // Update taskInfoEntity with values from requestDTO
+        taskInfoEntity.setTaskName(requestDTO.getTaskName());
+        taskInfoEntity.setTaskDescription(requestDTO.getTaskDescription());
+        taskInfoEntity.setTaskPriority(requestDTO.getTaskPriority());
+        taskInfoEntity.setTaskCategoryId(requestDTO.getTaskCategoryId());
+        taskInfoEntity.setTaskDueDate(dueDateTimestamp);
+        taskInfoEntity.setTaskAssignee(requestDTO.getTaskAssignee());
+        taskInfoEntity.setTaskRewardPoint(requestDTO.getTaskRewardPoint());
+        taskInfoEntity.setTaskStatus(requestDTO.getTaskStatus());
+        // Set default value for delete flag
+        taskInfoEntity.setDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
+        // Set  modifiedDate
+        taskInfoEntity.setModifiedDate(Timestamp.valueOf(LocalDateTime.now()));
+
+    }else{
+        throw new RuntimeException("Task not found!");
+    }
+
+    // Get the values from the jwt token for created by/modified by
+    String userName = TaskTrackerInterceptor.getLoggedInUserName();
+    String userRole = TaskTrackerInterceptor.getLoggedInUserRole();
+
+    if (!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)) {
+        throw new RuntimeException("Service Accessed Without Token");
+    }
+
+    if (userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)) {
+        UserInfo currentUserInfo = userInfoRepository.findByUsername(userName);
+        if (currentUserInfo != null) {
+            taskInfoEntity.setCreatedBy(currentUserInfo.getCreatedBy());
+            taskInfoEntity.setModifiedBy(currentUserInfo.getCreatedBy());
+        } else {
+            throw new RuntimeException("User Info unavailable in DB");
+        }
+    }
+
+
+
+    // Save and map to dto
+    TaskInfoDTO savedTaskInfoDTO = taskInfoMapper.taskInfoToTaskinfoDTO(taskInfoRepository.save(taskInfoEntity));
+
+    return savedTaskInfoDTO;
+
+
+
+}
 
     @Override
     public List<LeaderBoardDTO> findTaskRewardPointsByGroupId(Integer groupId) {
@@ -166,6 +253,32 @@ public class TaskInfoServiceImpl implements TaskInfoService {
             // If the task does not exist, throw an exception or handle the error as needed
             throw new RuntimeException("Task with ID " + id + " not found");
         }
+
+    }
+    @Override
+    public List<TaskInfoDTO> getAllActiveTasks(){
+
+        String userName = TaskTrackerInterceptor.getLoggedInUserName();
+        String userRole = TaskTrackerInterceptor.getLoggedInUserRole();
+
+
+        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
+            throw new RuntimeException("Service Accessed Without Token");
+        }
+        if(userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)) {
+            UserInfo currentUserInfo = userInfoRepository.findByUsername(userName);
+            if (currentUserInfo != null) {
+                return taskInfoRepository.findTaskByDeleteFlag(TaskTrackerConstant.DELETE_FLAG_FALSE);
+            }
+            else{
+                throw new RuntimeException("User not found!");
+            }
+
+        }
+        else{
+            throw new RuntimeException("Not Allowed to Access!");
+        }
+
 
     }
 }

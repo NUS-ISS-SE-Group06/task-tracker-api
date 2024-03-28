@@ -11,4 +11,8 @@ public interface TaskInfoService {
     public List<LeaderBoardDTO> findTaskRewardPointsByGroupId(Integer groupId);
 
     TaskInfoDTO deleteTask(int id);
+
+    List<TaskInfoDTO> getAllActiveTasks();
+
+    TaskInfoDTO updateTask(int taskId, TaskInfoDTO requestDTO);
 }

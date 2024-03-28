@@ -4,6 +4,10 @@ import com.nus.iss.tasktracker.dto.TaskInfoDTO;
 import com.nus.iss.tasktracker.model.TaskInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring")
 public interface TaskInfoMapper {
@@ -14,5 +18,11 @@ public interface TaskInfoMapper {
 
     TaskInfo taskInfoToEntity(TaskInfoDTO requestDTO);
 
+    @Named("toTimestamp")
+    default Timestamp toTimestamp(LocalDateTime localDateTime) {
+        return localDateTime != null ? Timestamp.valueOf(localDateTime) : null;
+    }
     TaskInfoDTO taskInfoToTaskinfoDTO(TaskInfo savedTaskInfoEntity);
+
+
 }

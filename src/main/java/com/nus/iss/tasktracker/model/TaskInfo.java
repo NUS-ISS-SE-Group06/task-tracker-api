@@ -37,7 +37,7 @@ public class TaskInfo {
 
     @Getter
     @Setter
-    private  Timestamp TaskDueDate;
+    private  Timestamp taskDueDate;
 
     @Getter
     @Setter
