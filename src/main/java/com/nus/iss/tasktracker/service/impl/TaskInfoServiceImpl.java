@@ -82,11 +82,10 @@ public class TaskInfoServiceImpl implements TaskInfoService {
         //get the values from the jwt token for created by/modified by
         String userName = TaskTrackerInterceptor.getLoggedInUserName();
         String userRole = TaskTrackerInterceptor.getLoggedInUserRole();
-//        String userRole = "ROLE_ADMIN";
-//        String userName = "user1";
-//        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
-//            throw new RuntimeException("Service Accessed Without Token");
-//        }
+
+        if(!StringUtils.hasText(userName) || !StringUtils.hasText(userRole)){
+            throw new RuntimeException("Service Accessed Without Token");
+        }
 
         if(userRole.equals(TaskTrackerConstant.REGISTRATION_ROLE_ADMIN)) {
             UserInfo currentUserInfo = userInfoRepository.findByUsername(userName);
